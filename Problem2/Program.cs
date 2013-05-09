@@ -10,25 +10,31 @@ namespace Problem2
 {
 	class MainClass
 	{
+		const int max = 4000000;
+
 		public static void Main (string[] args)
+		{
+			Console.WriteLine ("sum={0}", soln1());		// 4613732
+		}
+
+		public static int soln1()
 		{
 			List<int> fib = new List<int>() {1,2};
 			int sum = 0;
-			int max = 4000000;
+			
 			var sw = Stopwatch.StartNew();
-
+			
 			while (fib[fib.Count - 1] < max)
 			{
 				if (fib[fib.Count - 1] % 2 == 0)
 					sum += fib[fib.Count - 1];
-
+				
 				int n = fib[fib.Count - 2] + fib[fib.Count - 1];
 				fib.Add(n);
 			}
 			sw.Stop();
-
-			Console.WriteLine ("sum={0}", sum);		// 4613732
 			Console.WriteLine("elapsed = {0} secs", sw.Elapsed.TotalSeconds);
+			return sum;
 		}
 	}
 }
