@@ -11,8 +11,9 @@ namespace Problem1
 			Console.WriteLine("sum={0}", soln1());
 			Console.WriteLine("sum={0}", soln2());
 			Console.WriteLine("sum={0}", soln3());
-			//Console.WriteLine ("Press enter...");
-			//Console.ReadLine();
+			
+            Console.WriteLine ("Press enter...");
+			Console.ReadLine();
 			// sum=233168
 		}
 

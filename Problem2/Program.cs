@@ -15,6 +15,10 @@ namespace Problem2
 		public static void Main (string[] args)
 		{
 			Console.WriteLine ("sum={0}", soln1());		// 4613732
+
+            Console.WriteLine("Press enter...");
+            Console.ReadLine();
+
 		}
 
 		public static int soln1()
