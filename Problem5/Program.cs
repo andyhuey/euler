@@ -42,11 +42,11 @@ namespace Problem5
                 if (i == 1)
                     foundIt = true;
                 else
-                    ans += 20;
+                    ans += 2520;
             }
 
             sw.Stop();
-            Console.WriteLine("Loop iterations: {0:n0}", loopIterations);  // 51,473,096 -> 23,965,860 -> 12,326,357
+            Console.WriteLine("Loop iterations: {0:n0}", loopIterations);  // 102,848
             Console.WriteLine("elapsed: {0} sec", sw.Elapsed.TotalSeconds);
             return ans;
         }
