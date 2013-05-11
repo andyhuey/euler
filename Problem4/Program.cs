@@ -15,7 +15,7 @@ namespace Problem4
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("the answer is {0}", soln1());    // 913 * 993 = 906609
+            Console.WriteLine("the answer is {0}", soln_pdf());    // 913 * 993 = 906609
 
             Console.WriteLine("Press enter...");
             Console.ReadLine();
@@ -23,21 +23,19 @@ namespace Problem4
 
         static int soln1()
         {
-            // brute force
+            // mine
             int loopIterations = 0;
             int low = 0;
             int ans = 0;
             for (int i = 999; i >= 100; i--)
             {
                 Console.WriteLine("i={0}, j min={1}", i, Math.Max(100, low));
-                //Console.ReadLine();
                 for (int j = 999; j >= Math.Max(100, low); j--)
                 {
                     loopIterations++;
                     int a = i * j;
-                    if (isPanindrome(a))
+                    if (isPalindrome(a))
                     {
-                        //Console.WriteLine("{0} * {1} = {2}", i, j, a);
                         if (a > ans)
                         {
                             Console.WriteLine("{0} * {1} = {2}", i, j, a);
@@ -54,7 +52,78 @@ namespace Problem4
             return ans;
         }
 
-        static bool isPanindrome(int n)
+        static int soln2_ng()
+        {
+            int loopIterations = 0;
+            int low = 0;
+            int ans = 0;
+            for (int i = 999; i >= 100; i--)
+            {
+                //Console.WriteLine("i={0}, j min={1}", i, Math.Max(100, low));
+                //Console.ReadLine();
+                for (int j = 999; j >= i; j--)
+                {
+                    loopIterations++;
+                    int a = i * j;
+                    if (isPalindrome(a))
+                    {
+                        //Console.WriteLine("{0} * {1} = {2}", i, j, a);
+                        if (a < ans)
+                            break;  // since i*j is always going to be too small
+                        if (a > ans)
+                        {
+                            Console.WriteLine("{0} * {1} = {2}", i, j, a);
+                            low = Math.Max(low, Math.Min(i, j));
+                            ans = a;
+                        }
+                    }
+                }
+            }
+            // ...and back to not so good: loop iterations: 293,145
+            Console.WriteLine("loop iterations: {0}", loopIterations);
+            return ans;
+        }
+
+        static int soln_pdf()
+        {
+            // solution from the PDF
+            int loopIterations = 0;
+            int largestPalindrome = 0;
+            int a = 999;
+            int b, db;
+
+            while (a >= 100)
+            {
+                if (a % 11 == 0)
+                {
+                    b = 999;
+                    db = 1;
+                }
+                else
+                {
+                    b = 990;    //The largest number less than or equal 999
+                                //and divisible by 11
+                    db = 11;
+                }
+                while (b >= a)
+                {
+                    loopIterations++;
+                    if (a*b <= largestPalindrome)
+                        break;
+                    if (isPalindrome(a*b))
+                    {
+                        largestPalindrome = a*b;
+                    }
+                    b = b-db;
+                }
+                a--;
+            }
+            // loop iterations: 1330 -- much better than mine!
+            Console.WriteLine("loop iterations: {0}", loopIterations);
+            return largestPalindrome;
+    }
+
+        static bool isPalindrome(int n)
         {
             string s = n.ToString();
             return s.Equals(s.ReverseString());
