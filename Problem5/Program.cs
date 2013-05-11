@@ -15,14 +15,46 @@ namespace Problem5
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("the answer is {0}", soln1());
+            Console.WriteLine("the answer is {0:n0}", soln2());
 
             Console.WriteLine("Press enter...");
             Console.ReadLine();
         }
 
+        static long soln2()
+        {
+            // take two - note that 2520 is divisible by 20
+            int loopIterations = 0;
+            long ans = 2520;
+            bool foundIt = false;
+
+            var sw = Stopwatch.StartNew();
+
+            while (!foundIt)
+            {
+                loopIterations++;
+                long i;
+                for (i = 1; i <= 20; i++)
+                {
+                    if (ans % i != 0)
+                        break;
+                }
+                i--;
+                if (i >= 20)
+                    foundIt = true;
+                else
+                    ans += 20;
+            }
+
+            sw.Stop();
+            Console.WriteLine("Loop iterations: {0:n0}", loopIterations);  // 11,639,503
+            Console.WriteLine("elapsed: {0} sec", sw.Elapsed.TotalSeconds);
+            return ans;
+        }
+
         static long soln1()
         {
+            // brute force
             int loopIterations = 0;
             long ans = 2520;
             long bestSoFar = 1;  // for fun
@@ -52,7 +84,7 @@ namespace Problem5
             }
 
             sw.Stop();
-            Console.WriteLine("Loop iterations: {0}", loopIterations);  // 9234
+            Console.WriteLine("Loop iterations: {0}", loopIterations);  // 232,790,041
             Console.WriteLine("elapsed: {0} sec", sw.Elapsed.TotalSeconds);
             return ans;
         }
