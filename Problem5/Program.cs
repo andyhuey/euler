@@ -32,22 +32,21 @@ namespace Problem5
 
             while (!foundIt)
             {
-                loopIterations++;
                 long i;
-                for (i = 1; i <= 20; i++)
+                for (i = 19; i > 1; i--)
                 {
+                    loopIterations++;
                     if (ans % i != 0)
                         break;
                 }
-                i--;
-                if (i >= 20)
+                if (i == 1)
                     foundIt = true;
                 else
                     ans += 20;
             }
 
             sw.Stop();
-            Console.WriteLine("Loop iterations: {0:n0}", loopIterations);  // 11,639,503
+            Console.WriteLine("Loop iterations: {0:n0}", loopIterations);  // 51,473,096 -> 23,965,860 -> 12,326,357
             Console.WriteLine("elapsed: {0} sec", sw.Elapsed.TotalSeconds);
             return ans;
         }
