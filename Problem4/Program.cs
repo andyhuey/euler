@@ -25,10 +25,13 @@ namespace Problem4
         {
             // brute force
             int loopIterations = 0;
+            int low = 0;
             int ans = 0;
-            for (int i = 100; i < 1000; i++)
+            for (int i = 999; i >= 100; i--)
             {
-                for (int j = 100; j < 1000; j++)
+                Console.WriteLine("i={0}, j min={1}", i, Math.Max(100, low));
+                //Console.ReadLine();
+                for (int j = 999; j >= Math.Max(100, low); j--)
                 {
                     loopIterations++;
                     int a = i * j;
@@ -38,12 +41,15 @@ namespace Problem4
                         if (a > ans)
                         {
                             Console.WriteLine("{0} * {1} = {2}", i, j, a);
+                            low = Math.Max(low, Math.Min(i, j));
                             ans = a;
                         }
                     }
                 }
             }
             // first shot: loop iterations: 810,000
+            // a little better: loop iterations: 405,450
+            // a good bit better: loop iterations: 82,212
             Console.WriteLine("loop iterations: {0}", loopIterations);
             return ans;
         }
