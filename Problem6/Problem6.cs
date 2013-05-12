@@ -11,7 +11,7 @@ using System.Diagnostics;
 
 namespace Problem6
 {
-    class Program
+    class Problem6
     {
         static void Main(string[] args)
         {

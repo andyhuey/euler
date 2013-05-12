@@ -9,17 +9,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Problem4
+namespace Projects1to10
 {
-    class Program
+    class Problem4
     {
-        static void Main(string[] args)
-        {
-            Console.WriteLine("the answer is {0}", soln_pdf());    // 913 * 993 = 906609
+        //static void Main(string[] args)
+        //{
+        //    Console.WriteLine("the answer is {0}", soln_pdf());    // 913 * 993 = 906609
 
-            Console.WriteLine("Press enter...");
-            Console.ReadLine();
-        }
+        //    Console.WriteLine("Press enter...");
+        //    Console.ReadLine();
+        //}
 
         static int soln1()
         {

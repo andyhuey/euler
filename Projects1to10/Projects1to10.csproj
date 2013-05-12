@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{D94F979C-AADC-42DA-92FB-F479D1B597BB}</ProjectGuid>
+    <ProjectGuid>{A38F9E81-82A5-448C-9120-8778EDA29BF8}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Problem6</RootNamespace>
-    <AssemblyName>Problem6</AssemblyName>
+    <RootNamespace>Projects1to10</RootNamespace>
+    <AssemblyName>Projects1to10</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -43,7 +43,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Problem1.cs" />
+    <Compile Include="Problem2.cs" />
+    <Compile Include="Problem3.cs" />
+    <Compile Include="Problem4.cs" />
+    <Compile Include="Problem5.cs" />
     <Compile Include="Problem6.cs" />
+    <Compile Include="Problem7.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

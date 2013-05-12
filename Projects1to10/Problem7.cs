@@ -9,19 +9,19 @@ using System.Linq;
 using System.Text;
 using System.Diagnostics;
 
-namespace Problem7
+namespace Projects1to10
 {
-    class Program
+    class Problem7
     {
-        static void Main(string[] args)
-        {
-            Console.WriteLine("the answer is {0:n0}", soln1());
+        //static void Main(string[] args)
+        //{
+        //    Console.WriteLine("the answer is {0:n0}", soln1());
 
-            Console.WriteLine("Press enter...");
-            Console.ReadLine();
-        }
+        //    Console.WriteLine("Press enter...");
+        //    Console.ReadLine();
+        //}
         
-        static long soln1()
+        public static long soln1()
         {
             // borrowing a bit from http://stackoverflow.com/a/3745785/301677
             //int loopIterations = 0;

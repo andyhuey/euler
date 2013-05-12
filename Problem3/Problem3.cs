@@ -14,7 +14,7 @@ using System.Diagnostics;
 
 namespace Problem3
 {
-    class Program
+    class Problem3
     {
         //static int n = 13195;
         static long n = 600851475143;
