@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Projects11to19
+namespace Problems11to19
 {
     class Program
     {

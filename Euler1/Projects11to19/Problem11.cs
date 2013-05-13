@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Diagnostics;
 
-namespace Projects11to19
+namespace Problems11to19
 {
     public class Problem11
     {
