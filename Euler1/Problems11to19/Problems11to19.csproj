@@ -8,8 +8,8 @@
     <ProjectGuid>{2824A499-3F65-4EED-AF41-B77F38C89C65}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Projects11to19</RootNamespace>
-    <AssemblyName>Projects11to19</AssemblyName>
+    <RootNamespace>Problems11to19</RootNamespace>
+    <AssemblyName>Problems11to19</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Problem11.cs" />
+    <Compile Include="Problem12.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
