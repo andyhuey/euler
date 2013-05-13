@@ -16,47 +16,46 @@ namespace Projects1to10
         public long soln1()
         {
             //int loopIterations = 0;
-            long nPrimeMax = 2000000;
-            List<long> primes = new List<long> { 2 };
-            long i = 3;
-            long sqrt_i;
-            bool isPrime;
-            bool isDone = false;
+            int nPrimeMax = 2000000;
+            int p = 2;
+            int sqrt_max = (int)Math.Floor(Math.Sqrt(nPrimeMax));
 
             var sw = Stopwatch.StartNew();
 
-            while (!isDone)
+            bool[] primes = new bool[nPrimeMax];
+            for (int i = 2; i < nPrimeMax; i++)
+                primes[i] = true;
+
+            while (p <= sqrt_max)
             {
-                sqrt_i = (long)Math.Floor(Math.Sqrt(i));
-                isPrime = true;
-                foreach (var p in primes)
+                // cross out all the multiple of p.
+                for (int i = p * p; i < nPrimeMax; i += p)
                 {
-                    if (i % p == 0)
-                    {
-                        isPrime = false;
-                        break;
-                    }
-                    if (p > sqrt_i) // this helps a lot.
-                        break;
+                    primes[i] = false;
                 }
-                if (isPrime)
+
+                // get the next p.
+                do
                 {
-                    if (i >= nPrimeMax)
-                        isDone = true;
-                    else
-                    {
-                        primes.Add(i);
-                        //Console.WriteLine("Found prime {0}: {1:n0}", primes.Count, i);
-                    }
-                }
-                i++;
-                //i += 2;     // skip even #s -- doesn't really speed anything up...
+                    p++;
+                } while (!primes[p]);
             }
 
+            // sum up the primes
+            long ans = 0;
+            for (int i = 2; i < nPrimeMax; i++)
+            {
+                if (primes[i])
+                {
+                    //Console.WriteLine(i);
+                    ans += i;
+                }
+            }
+            
             sw.Stop();
             //Console.WriteLine("Loop iterations: {0:n0}", loopIterations);
             Console.WriteLine("elapsed: {0} ms", sw.Elapsed.TotalMilliseconds);
-            return primes.Sum();
+            return ans;
         }
     }
 }
