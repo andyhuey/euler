@@ -25,6 +25,12 @@ namespace Problems11to19
             {
                 triNum++;
                 currTriNumVal += triNum;
+                // or it could be (n * n+1)/2
+
+                // to have 500 factors, the # must be at least 500^2...
+                if (currTriNumVal < 500 * 500)
+                    continue;
+
                 nFactors = GetFactors(currTriNumVal).Count();
 
                 if (nFactors > nLastFactors)
@@ -40,6 +46,9 @@ namespace Problems11to19
                 //if (currTriNumVal > 100)
                 //    break;
             }
+
+            // show the factors, for curiosity's sake...
+            //Console.WriteLine(string.Join(", ",GetFactors(currTriNumVal).ToArray()));
 
             sw.Stop();
             //Console.WriteLine("Loop iterations: {0:n0}", loopIterations);
