@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Diagnostics;
+using System.Numerics;
 
 namespace Problems11to19
 {
@@ -18,34 +19,38 @@ namespace Problems11to19
             //int loopIterations = 0;
             var sw = Stopwatch.StartNew();
 
-            ulong[] myUlongArray = createUlongArray();
+            BigInteger[] myBigIntArray = createBigIntArray();
 
-            ulong mySum = 0;
-            foreach (var u in myUlongArray)
+            BigInteger mySum = 0;
+            foreach (var u in myBigIntArray)
                 mySum += u;
 
-            mySum = mySum / 10;
-            if (mySum % 10 >= 5)
-                mySum++;            // this is almost definitely wrong...
+            string theWholeSum = mySum.ToString();
+            Console.WriteLine("This should be a very large number: {0}", theWholeSum);
 
+            ulong firstTenOfSum;
+            bool ok = ulong.TryParse(theWholeSum.Substring(0, 10), out firstTenOfSum);
+            if (!ok)
+                throw new Exception("Can't parse the sum!");
+            
             sw.Stop();
             //Console.WriteLine("Loop iterations: {0:n0}", loopIterations);
             Console.WriteLine("elapsed: {0} ms", sw.Elapsed.TotalMilliseconds);
-            return mySum;
+            return firstTenOfSum;
         }
 
-        private ulong[] createUlongArray()
+        private BigInteger[] createBigIntArray()
         {
             // create an array of ulong's representing the first 11 digits of each number.
-            ulong[] myUlongArray = new ulong[bigNumsToSum.Length];
+            BigInteger[] myBigIntArray = new BigInteger[bigNumsToSum.Length];
 
             for (int i = 0; i < bigNumsToSum.Length; i++)
             {
-                bool ok = ulong.TryParse(bigNumsToSum[0].Substring(0, 11), out myUlongArray[i]);
+                bool ok = BigInteger.TryParse(bigNumsToSum[i], out myBigIntArray[i]);
                 if (!ok)
                     throw new Exception("Can't parse one of the big numbers!");
             }
-            return myUlongArray;
+            return myBigIntArray;
         }
         
         string[] bigNumsToSum = {
