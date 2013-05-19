@@ -13,7 +13,7 @@ namespace Problems11to19
     class Problem14
     {
         const int max_n = 1000000;
-        long[] cslen;
+        Dictionary<long,long> cslen;
 
         public long soln1()
         {
@@ -21,23 +21,24 @@ namespace Problems11to19
             var sw = Stopwatch.StartNew();
 
             // this array will track the # of elements in the Collatz seq for input N
-            cslen = new long[max_n];
-            for (int i = 0; i < max_n; i++)
-                cslen[i] = 0;
+            cslen = new Dictionary<long, long>();
 
+            long maxIndex = 0, maxValue = 0;
             for (int i = 1; i < max_n; i++)
             {
                 cslen[i] = getCollatzSeqLen(i);
                 //Console.WriteLine("{0}: {1}", i, cslen[i]);
+                if (cslen[i] > maxValue)
+                {
+                    maxIndex = i;
+                    maxValue = cslen[i];
+                }
             }
 
             sw.Stop();
             Console.WriteLine("elapsed: {0} ms", sw.Elapsed.TotalMilliseconds);
             //Console.WriteLine("Loop iterations: {0:n0}", loopIterations);
-            long maxValue = cslen.Max();
-            int maxIndex = cslen.ToList().IndexOf(maxValue);
             Console.WriteLine("seq for {0} is {1} long.", maxIndex, maxValue);
-            //Console.WriteLine("seq for {0} is {1} long.", 837799, cslen[837799]);
             return maxIndex;
         }
 
@@ -48,7 +49,7 @@ namespace Problems11to19
                 return 1;
             while (n > 1)
             {
-                if (n < max_n && cslen[n] > 0)
+                if (cslen.ContainsKey(n))
                 {
                     return seqlen + cslen[n];
                 }
