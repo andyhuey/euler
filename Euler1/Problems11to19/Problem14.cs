@@ -1,6 +1,7 @@
 ﻿/*
  * http://projecteuler.net/problem=14
  * Longest Collatz sequence
+ * NOTE: the previous solution, with the array, is better than this one...
  */
 using System;
 using System.Collections.Generic;
