@@ -1,0 +1,14 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Problems11to19/Program.cs">
+    <Files>
+      <File FileName="Problems11to19/Problem15.cs" Line="23" Column="17" />
+      <File FileName="Problems11to19/Problem14.cs" Line="11" Column="1" />
+      <File FileName="Problems11to19/Program.cs" Line="12" Column="42" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
