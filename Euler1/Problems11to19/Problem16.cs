@@ -19,13 +19,11 @@ namespace Problems11to19
         {
             var sw = Stopwatch.StartNew();
             int pow;
-            //int value = 2;
             List<int> value = new List<int>() { 2 };
 
             for (pow = 2; pow <= max_power; pow++)
             {
-                //value = value + value;
-                value = doubleIt(value);
+                doubleIt(value);
             }
 
             sw.Stop();
@@ -34,9 +32,8 @@ namespace Problems11to19
             return value.Sum();
         }
 
-        List<int> doubleIt(List<int> value)
+        void doubleIt(List<int> value)
         {
-            List<int> newValue = new List<int>();
             int sum;
             int carry = 0;
 
@@ -49,13 +46,11 @@ namespace Problems11to19
                     carry = 1;
                     sum -= 10;
                 }
-                newValue.Add(sum);
+                value[i] = sum;
             }
 
             if (carry > 0)
-                newValue.Add(carry);
-
-            return newValue;
+                value.Add(carry);
         }
     }
 }
