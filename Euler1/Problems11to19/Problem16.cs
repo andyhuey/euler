@@ -52,5 +52,21 @@ namespace Problems11to19
             if (carry > 0)
                 value.Add(carry);
         }
+
+        public long soln2()
+        {
+            // simple with BigInts.
+            BigInteger n = 1;
+            long sum = 0;
+            string result;
+
+            result = (n << 1000).ToString();
+
+            for (int i = 0; i < result.Length; i++)
+            {
+                sum += Int32.Parse(result.Substring(i, 1));
+            }
+            return sum;
+        }
     }
 }
