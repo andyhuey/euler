@@ -13,26 +13,36 @@ namespace Problems20to29
 {
     class Problem26
     {
-        public long soln1()
+        public int soln1()
         {
-            long n = 0;
+            int longestRepeatDenom = 0, longestRepeatLen = 0;
+            int len;
+
             var sw = Stopwatch.StartNew();
 
-            for (int i = 1; i <= 10; i++)
+            for (int d = 1; d < 1000; d++)
             {
-                messingAround(i);
+                len = checkFraction(d);
+                if (len > longestRepeatLen)
+                {
+                    longestRepeatLen = len;
+                    longestRepeatDenom = d;
+                }
             }
 
             sw.Stop();
+            Console.WriteLine("Longest repeating length is {0} for denominator {1}",
+                longestRepeatLen, longestRepeatDenom);
             Console.WriteLine("elapsed: {0} ms", sw.Elapsed.Milliseconds);
-            return n;
+            return longestRepeatDenom;
         }
 
-        private void messingAround(int denom)
+        private int checkFraction(int denom)
         {
             // figure out 1/denom...
             int n, r = 1, start;
             List<int> result = new List<int>();
+            List<int> remainders = new List<int>();
 
             Console.WriteLine("Processing 1/{0}...", denom);
             while (r != 0) 
@@ -40,15 +50,18 @@ namespace Problems20to29
                 n = (r * 10) / denom;
                 r = (r * 10) % denom;
 
-                if (result.Contains(n))
+                if (remainders.Contains(r))
                 {
                     start = result.IndexOf(n);
                     Console.WriteLine("Result starts repeating at pos {0}, for a length of {1}.", start, result.Count - start);
-                    break;
+                    Console.WriteLine("1/{0} --> 0.{1}", denom, string.Join("", result));
+                    return result.Count - start;
+                    //break;
                 }
                 result.Add(n);
+                remainders.Add(r);
             }
-            Console.WriteLine("1/{0} --> 0.{1}", denom, string.Join(" ", result));
+            return 0;
         }
     }
 }
