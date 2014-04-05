@@ -1,5 +1,6 @@
 // http://projecteuler.net/problem=2
 // sum of even-valued Fibonacci numbers
+// Answer: 4,613,732
 // ajh 2013-05-08
 
 using System;
@@ -12,19 +13,7 @@ namespace Projects1to10
 	{
 		const int max = 4000000;
 
-        //public static void Main (string[] args)
-        //{
-        //    Console.WriteLine ("sum={0}", soln1());		// 4613732
-        //    Console.WriteLine ("sum={0}", soln2());
-        //    Console.WriteLine ("sum={0}", soln3());
-        //    Console.WriteLine ("sum={0}", soln4());
-
-        //    Console.WriteLine("Press enter...");
-        //    Console.ReadLine();
-
-        //}
-
-		public static int soln4()
+		public int soln4()
 		{
 			//  E(n)=4*E(n-1)+E(n-2).
 

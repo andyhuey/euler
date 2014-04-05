@@ -9,7 +9,7 @@ namespace Projects1to10
     {
         static void Main(string[] args)
         {
-            var myProblem = new Problem10();
+            var myProblem = new Problem3();
             Console.WriteLine("the answer is {0:n0}", myProblem.soln1());
 
             Console.WriteLine("Press enter...");

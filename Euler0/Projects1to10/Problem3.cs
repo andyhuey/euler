@@ -47,7 +47,7 @@ namespace Projects1to10
             return n;
         }
         
-        private static long soln1()
+        public long soln1()
         {
             long loopIterations = 0;
             long i = 2;

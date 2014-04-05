@@ -1,6 +1,7 @@
 // http://projecteuler.net/problem=1
 // ajh 2013-05-08
 using System;
+using System.Linq;
 
 namespace Projects1to10
 {
@@ -14,15 +15,15 @@ namespace Projects1to10
 			
         //    Console.WriteLine ("Press enter...");
         //    Console.ReadLine();
-        //    // sum=233168
+        //    // sum=233,168
         //}
 
-		static int soln3()
+		public int soln3()
 		{
 			return sumDivByN(3,999) + sumDivByN(5,999) - sumDivByN(15,999);
 		}
 
-		static int sumDivByN(int n, int target)
+		private int sumDivByN(int n, int target)
 		{
 			int p = target / n;
 			//Console.WriteLine("{0} -> {1}", p, n*(p*(p+1)) / 2);
@@ -59,5 +60,11 @@ namespace Projects1to10
 			}
 			return sum;
 		}
+
+        public int soln_raptorix()
+        {
+            //03 Apr 2014 02:41 pm - raptorix  
+            return Enumerable.Range(1, 999).ToArray().Where(num => (num % 3) == 0 || (num % 5) == 0).Sum();
+        }
 	}
 }
