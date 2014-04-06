@@ -2,6 +2,8 @@
  * http://projecteuler.net/problem=5
  * 2520 is the smallest number that can be divided by each of the numbers from 1 to 10 without any remainder.
  * What is the smallest positive number that is evenly divisible by all of the numbers from 1 to 20?
+ * 
+ * the answer is 232,792,560
  */
 using System;
 using System.Collections.Generic;
@@ -13,15 +15,7 @@ namespace Projects1to10
 {
     class Problem5
     {
-        //static void Main(string[] args)
-        //{
-        //    Console.WriteLine("the answer is {0:n0}", soln2());
-
-        //    Console.WriteLine("Press enter...");
-        //    Console.ReadLine();
-        //}
-
-        static long soln2()
+        public long soln2()
         {
             // take two - note that 2520 is divisible by 20
             int loopIterations = 0;
