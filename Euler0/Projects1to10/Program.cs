@@ -9,8 +9,8 @@ namespace Projects1to10
     {
         static void Main(string[] args)
         {
-            var myProblem = new Problem5();
-            Console.WriteLine("the answer is {0:n0}", myProblem.soln2());
+            var myProblem = new Problem6();
+            Console.WriteLine("the answer is {0:n0}", myProblem.soln_pdf());
 
             Console.WriteLine("Press enter...");
             Console.ReadLine();

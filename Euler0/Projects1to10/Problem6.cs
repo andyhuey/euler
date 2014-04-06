@@ -1,6 +1,8 @@
 ﻿/*
  * http://projecteuler.net/problem=6
  * Find the difference between the sum of the squares of the first one hundred natural numbers and the square of the sum.
+ * 
+ * the answer is 25,164,150
  */
 
 using System;
@@ -13,16 +15,7 @@ namespace Projects1to10
 {
     class Problem6
     {
-        //static void Main(string[] args)
-        //{
-        //    Console.WriteLine("the answer is {0:n0}", soln1());
-        //    Console.WriteLine("the answer from the PDF is {0:n0}", soln_pdf());
-
-        //    Console.WriteLine("Press enter...");
-        //    Console.ReadLine();
-        //}
-
-        static long soln_pdf()
+        public long soln_pdf()
         {
             long n = 100;
             long sum = (n * (n + 1)) / 2;
@@ -34,7 +27,7 @@ namespace Projects1to10
             return squareOfSums - sumOfSquares;
         }
 
-        static long soln1()
+        public long soln1()
         {
             //int loopIterations = 0;
             long n = 100;
