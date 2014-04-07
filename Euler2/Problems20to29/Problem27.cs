@@ -75,7 +75,7 @@ namespace Problems20to29
             if (n < nOldMax)
                 return this.primes[n];
 
-            int p = 2;
+            int p = 2;      // NOTE: we shouldn't always start at 2. I'm repeating work I've already done...
             int nPrimeMax = nOldMax + INCR;
             int sqrt_max = (int)Math.Floor(Math.Sqrt(nPrimeMax));
 
