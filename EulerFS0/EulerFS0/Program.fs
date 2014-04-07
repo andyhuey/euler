@@ -4,7 +4,7 @@
 [<EntryPoint>]
 let main argv = 
     //printfn "%A" argv
-    //printfn "The answer is %A" Problem5.soln1
+    //printfn "The answer is %A" Problem6.soln1
     System.Console.WriteLine("The answer is {0:n0}.", Problem6.soln1)
 
     printfn "Press enter..."
