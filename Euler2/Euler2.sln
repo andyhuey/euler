@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Express 2012 for Windows Desktop
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Problems20to29", "Problems20to29\Problems20to29.csproj", "{9DEF4E16-2A30-4B9E-AD44-45269860A0A1}"
 EndProject
 Global
@@ -13,6 +13,25 @@ Global
 		{9DEF4E16-2A30-4B9E-AD44-45269860A0A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9DEF4E16-2A30-4B9E-AD44-45269860A0A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9DEF4E16-2A30-4B9E-AD44-45269860A0A1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Problems20to29\Problems20to29.csproj
+		Policies = $0
+		$0.DotNetNamingPolicy = $1
+		$1.DirectoryNamespaceAssociation = None
+		$1.ResourceNamePolicy = FileFormatDefault
+		$0.TextStylePolicy = $2
+		$2.FileWidth = 120
+		$2.TabsToSpaces = False
+		$2.EolMarker = Windows
+		$2.inheritsSet = VisualStudio
+		$2.inheritsScope = text/plain
+		$2.scope = text/x-csharp
+		$0.CSharpFormattingPolicy = $3
+		$3.AfterDelegateDeclarationParameterComma = True
+		$3.inheritsSet = Mono
+		$3.inheritsScope = text/x-csharp
+		$3.scope = text/x-csharp
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
