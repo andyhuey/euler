@@ -14,6 +14,22 @@ Global
 		{2824A499-3F65-4EED-AF41-B77F38C89C65}.Release|x86.ActiveCfg = Release|x86
 		{2824A499-3F65-4EED-AF41-B77F38C89C65}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Problems11to19\Problems11to19.csproj
+		Policies = $0
+		$0.TextStylePolicy = $1
+		$1.FileWidth = 120
+		$1.TabsToSpaces = False
+		$1.EolMarker = Windows
+		$1.inheritsSet = VisualStudio
+		$1.inheritsScope = text/plain
+		$1.scope = text/x-csharp
+		$0.CSharpFormattingPolicy = $2
+		$2.AfterDelegateDeclarationParameterComma = True
+		$2.inheritsSet = Mono
+		$2.inheritsScope = text/x-csharp
+		$2.scope = text/x-csharp
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
