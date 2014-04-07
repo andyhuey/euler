@@ -1,6 +1,7 @@
 ﻿/*
  * http://projecteuler.net/problem=27
  * Quadratic primes
+ * The answer is -59,231
  */
 using System;
 using System.Collections.Generic;
@@ -26,13 +27,50 @@ namespace Problems20to29
         public long soln1()
         {
             //var sw = Stopwatch.StartNew();
-            for (int i = 3; i < 1200; i += 17)
-                Console.WriteLine("Is {0} prime? - {1}", i, this.isPrime(i));
-            return 0;
+            // known equations:
+            //Console.WriteLine("n2 + n + 41 produces {0} primes.", howManyPrimes(1, 41));
+            //Console.WriteLine("n2 - 79n + 1601 produces {0} primes.", howManyPrimes(-79, 1601));
+
+            int nMaxPrimes = 0;
+            int nMaxA = 0, nMaxB = 0;
+
+            for (int a = -999; a < 1000; a++)
+                for (int b = 0; b < 1000; b++)
+                {
+                    // don't bother if b isn't prime.
+                    if (!isPrime(b))
+                        continue;
+                    // try it out...
+                    int nPrimes = howManyPrimes(a, b);
+                    if (nPrimes > nMaxPrimes)
+                    {
+                        Console.WriteLine("a={0}, b={1} produces {2} primes.", a, b, nPrimes);
+                        nMaxPrimes = nPrimes;
+                        nMaxA = a;
+                        nMaxB = b;
+                    }
+                }
+            return nMaxA * nMaxB;
+        }
+
+        private int howManyPrimes(int a, int b)
+        {
+            int n = 0;
+            while (isPrime(evalQuadEq(n, a, b)))
+                n++;
+            return n;
+        }
+
+        private int evalQuadEq(int n, int a, int b)
+        {
+            return (n * n) + (a * n) + b;
         }
 
         private bool isPrime(int n)
         {
+            if (n < 0)
+                return false;
+
             int nOldMax = this.primes.Count();
             if (n < nOldMax)
                 return this.primes[n];
