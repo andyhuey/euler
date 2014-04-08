@@ -1,4 +1,9 @@
-﻿using System;
+﻿/*
+ * http://projecteuler.net/problem=31
+ * coin sums
+ * The answer is 73,682
+ */
+using System;
 
 namespace Problems30to39
 {
@@ -6,15 +11,15 @@ namespace Problems30to39
 	{
 		public long soln1()
 		{
-			int[] S = { 1, 2, 5 };
+            // from http://www.geeksforgeeks.org/dynamic-programming-set-7-coin-change/
+            int[] S = { 1, 2, 5, 10, 20, 50, 100, 200 };
 			int m = S.Length;
-			int n = 5;
+			int n = 200;
 			return count (S, m, n);
 		}
 
 		private long count(int[] S, int m, int n)
 		{
-			// from http://www.geeksforgeeks.org/dynamic-programming-set-7-coin-change/
 			// If n is 0 then there is 1 solution (do not include any coin)
 			if (n == 0)
 				return 1;
@@ -29,7 +34,6 @@ namespace Problems30to39
 
 			// count is sum of solutions (i) including S[m-1] (ii) excluding S[m-1]
 			return count(S, m - 1, n) + count(S, m, n-S[m-1]);
-		}
 		}
 	}
 }
