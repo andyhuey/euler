@@ -1,6 +1,6 @@
 ﻿module Problem31
-// converted to F# from the code at http://www.geeksforgeeks.org/dynamic-programming-set-7-coin-change/
 
+// converted to F# from the code at http://www.geeksforgeeks.org/dynamic-programming-set-7-coin-change/
 let rec count (S:_[]) m n =
     // If n is 0 then there is 1 solution (do not include any coin)
     if n = 0 then 1
@@ -16,3 +16,15 @@ let soln1 =
     let m = S.Length
     let n = 200
     count S m n
+
+// code from user therewillbebears, 06 Mar 2014, converted from Python.
+let soln2 = 
+    let target = 200
+    let coins = [| 1; 2; 5; 10; 20; 50; 100; 200 |]
+    let combos = [| for i in [0..target] -> if i = 0 then 1 else 0 |]
+
+    for coin in coins do 
+        for x in [coin .. target] do
+            combos.[x] <- combos.[x] + combos.[x - coin]
+
+    combos.[target]
