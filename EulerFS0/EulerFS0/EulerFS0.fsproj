@@ -55,6 +55,7 @@
     <Compile Include="Problem5.fs" />
     <Compile Include="Problem6.fs" />
     <Compile Include="Problem29.fs" />
+    <Compile Include="Problem31.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
   <PropertyGroup>
