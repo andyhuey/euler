@@ -1,5 +1,6 @@
 ﻿/*
  * http://projecteuler.net/problem=24
+ * Lexicographic permutations
  */
 using System;
 using System.Collections.Generic;

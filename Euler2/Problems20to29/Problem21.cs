@@ -1,5 +1,6 @@
 ﻿/*
  * http://projecteuler.net/problem=21
+ * Amicable numbers
  */
 using System;
 using System.Collections.Generic;

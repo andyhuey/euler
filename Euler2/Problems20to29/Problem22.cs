@@ -1,5 +1,6 @@
 ﻿/*
  * http://projecteuler.net/problem=22
+ * Names scores
  */
 using System;
 using System.Collections.Generic;

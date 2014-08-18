@@ -1,6 +1,7 @@
 ﻿/*
  * http://projecteuler.net/problem=23
-   http://www.mathblog.dk/project-euler-23-find-positive-integers-not-sum-of-abundant-numbers/
+ * Non-abundant sums
+ * http://www.mathblog.dk/project-euler-23-find-positive-integers-not-sum-of-abundant-numbers/
  */
 using System;
 using System.Collections.Generic;

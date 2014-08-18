@@ -1,6 +1,8 @@
 ﻿/*
  * http://projecteuler.net/problem=20
+ * Factorial digit sum
  * Find the sum of the digits in the number 100!
+ * Answer: 648
  */
 using System;
 using System.Collections.Generic;

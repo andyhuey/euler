@@ -1,5 +1,6 @@
 ﻿/*
  * http://projecteuler.net/problem=26
+ * Reciprocal cycles
  */
 using System;
 using System.Collections.Generic;
