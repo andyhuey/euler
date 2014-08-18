@@ -1,10 +1,11 @@
 ﻿/*
  * http://projecteuler.net/problem=32
  * Pandigital products
- * 
+ * The answer is 45,228 or 45228
  */
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,24 +16,17 @@ namespace Problems30to39
     {
         public long soln1()
         {
+            var sw = Stopwatch.StartNew();
             HashSet<int> pandigProds = new HashSet<int>();
             int prod;
+            int sumOfProds;
 
-            // 39 × 186 = 7254
-            //int x = 39; int y = 186;
+            //int x = 39; int y = 7254;  // 39 × 186 = 7254
             //Console.WriteLine("{0} * {1} -> {2}", x, y, this.isPandigitalProduct(x, y, out prod));
-
-            // a little test.
-            pandigProds.Add(1);
-            pandigProds.Add(2);
-            pandigProds.Add(1);
-            foreach (int i in pandigProds)
-                Console.WriteLine(i);
-
-            return pandigProds.Sum();
+            //return 0;
 
             for (int i = 1; i <= 999; i++)
-                for (int j = i; j <= 999; j++)
+                for (int j = i; j <= 9999; j++)
                 {
                     if (this.isPandigitalProduct(i, j, out prod))
                     {
@@ -41,7 +35,10 @@ namespace Problems30to39
                     }
                 }
 
-            return pandigProds.Sum();
+            sumOfProds = pandigProds.Sum();
+            sw.Stop();
+            Console.WriteLine("elapsed: {0} ms", sw.Elapsed.Milliseconds);
+            return sumOfProds;
         }
 
         private bool isPandigitalProduct(int n1, int n2, out int prod)
@@ -55,7 +52,9 @@ namespace Problems30to39
             foreach (char ch in s)
             {
                 i = (int)ch - (int)'0';
-                hasOnlyOne[i] = !hasOnlyOne[i] && true;
+                if (hasOnlyOne[i])
+                    return false;   // already got one...
+                hasOnlyOne[i] = true;
             }
 
             return hasOnlyOne.All(x => x == true);
