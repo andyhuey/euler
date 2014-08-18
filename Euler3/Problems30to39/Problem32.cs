@@ -25,8 +25,20 @@ namespace Problems30to39
             //Console.WriteLine("{0} * {1} -> {2}", x, y, this.isPandigitalProduct(x, y, out prod));
             //return 0;
 
-            for (int i = 1; i <= 999; i++)
-                for (int j = i; j <= 9999; j++)
+            // only valid combos are |1|*|4| and |2|*|3|, I think.
+            // |1|*|4|:
+            for (int i = 1; i <= 9; i++)
+                for (int j = 1000; j <= 9999; j++)
+                {
+                    if (this.isPandigitalProduct(i, j, out prod))
+                    {
+                        pandigProds.Add(prod);
+                        Console.WriteLine("{0} * {1} = {2}", i, j, prod);
+                    }
+                }
+            // |2|*|3|
+            for (int i = 10; i <= 99; i++)
+                for (int j = 100; j <= 999; j++)
                 {
                     if (this.isPandigitalProduct(i, j, out prod))
                     {
