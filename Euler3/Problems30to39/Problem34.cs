@@ -2,6 +2,7 @@
  * http://projecteuler.net/problem=34
  * Digit factorials
  * Find the sum of all numbers which are equal to the sum of the factorial of their digits.
+ * The answer is 40,730.
  */
 using System;
 using System.Collections.Generic;
@@ -45,16 +46,28 @@ namespace Problems30to39
         public long soln1()
         {
             var sw = Stopwatch.StartNew();
+            long mySum = 0;
 
             this.calcFactorials();
             //for (int i = 0; i <= 9; i++)
             //    Console.WriteLine("{0}! = {1}", i, myFactorials[i]);
 
-            Console.WriteLine(this.sumOfFactsOfDigits(123));
+            //Console.WriteLine(this.sumOfFactsOfDigits(123));
+            // brute force, just to see what kind of pattern develops:
+            for (int i = 3; i < 1000000; i++)
+            {
+                if (i == this.sumOfFactsOfDigits(i))
+                {
+                    Console.WriteLine("{0} = {1}", i, this.sumOfFactsOfDigits(i));
+                    mySum += i;
+                }
+                //if (i % 1000000 == 0)
+                //    Console.WriteLine("At {0:n0}...", i);
+            }
 
             sw.Stop();
             Console.WriteLine("elapsed: {0} ms", sw.Elapsed.Milliseconds);
-            return 0;
+            return mySum;
         }
     }
 }
