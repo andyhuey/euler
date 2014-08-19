@@ -41,9 +41,23 @@ namespace Problems30to39
         static bool isPalindrome(int n)
         {
             string s10 = n.ToString();
-            string s2 = Convert.ToString(n, 2);
-
+            string s2 = Convert.ToString(n, 2); // convert to base 2.
             return s10.Equals(s10.ReverseString()) && s2.Equals(s2.ReverseString());
+
+            //return isPalindrome(n, 2) && isPalindrome(n, 10);
+        }
+
+        static bool isPalindrome(int n, int b)
+        {
+            // from the solution PDF.
+            int rev = 0;
+            int k = n;
+            while (k > 0)
+            {
+                rev = b * rev + k % b;
+                k = k / b;
+            }
+            return (n == rev);
         }
     }
 
