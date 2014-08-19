@@ -16,10 +16,10 @@ namespace Problems30to39
     {
         struct Fraction
         {
-            public int n;
-            public int d;
+            public int n { get; private set; }
+            public int d { get; private set; }
 
-            public Fraction(int n, int d)
+            public Fraction(int n, int d) : this()
             {
                 this.n = n;
                 this.d = d;
@@ -28,6 +28,27 @@ namespace Problems30to39
             public override string ToString()
             {
                 return string.Format("{0}/{1}", n, d);
+            }
+
+            public void reduce()
+            {
+                int myGcd = gcd(n, d);
+                n /= myGcd;
+                d /= myGcd;
+            }
+
+            private int gcd(int a, int b)
+            {
+                // http://en.wikipedia.org/wiki/Greatest_common_divisor
+                // Using Euclid's algorithm
+                // assuming a & b are > 0.
+                //Console.WriteLine("a={0}, b={1}", a, b);
+                if (a == b)
+                    return a;
+                else if (a > b)
+                    return gcd(a - b, b);
+                else
+                    return gcd(a, b - a);
             }
         }
 
@@ -57,14 +78,14 @@ namespace Problems30to39
                     if (n1 != d2 && n2 != d1)
                         continue;
 
-                    // I know this isn't quite right...
+                    // can we 'cancel the digits'?
                     float f1 = (float)n / d;
                     float f2 = (float)n1 / d2;
                     float f3 = (float)n2 / d1;
                     if (f1 == f2 || f1 == f3)
                     {
                         // we've got it, I think.
-                        f = new Fraction(n1 * 10 + n2, d1 * 10 + d2);
+                        f = new Fraction(n, d);
                         Console.WriteLine(f);
                         results.Add(f);
                     }
@@ -80,9 +101,8 @@ namespace Problems30to39
                 d1 *= frac.d;
             }
             // and reduce the fraction
-            int myGcd = gcd(n1, d1);
-            //Console.WriteLine("n1={0}, d1={1}, gcd={2}", n1, d1, myGcd);
-            f = new Fraction(n1 / myGcd, d1 / myGcd);
+            f = new Fraction(n1, d1);
+            f.reduce();
             Console.WriteLine("The resulting fraction is {0}.", f);
 
             sw.Stop();
@@ -90,18 +110,5 @@ namespace Problems30to39
             return f.d;
         }
 
-        private int gcd(int a, int b)
-        {
-            // http://en.wikipedia.org/wiki/Greatest_common_divisor
-            // Using Euclid's algorithm
-            // assuming a & b are > 0.
-            //Console.WriteLine("a={0}, b={1}", a, b);
-            if (a == b)
-                return a;
-            else if (a > b)
-                return gcd(a - b, b);
-            else
-                return gcd(a, b - a);
-        }
     }
 }
