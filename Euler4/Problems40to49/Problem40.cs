@@ -19,7 +19,7 @@ namespace Problems40to49
 
             // let's start with just a string...
             StringBuilder sb = new StringBuilder();
-            for (int i = 1; i < 1000; i++)
+            for (int i = 1; i < 10000; i++)
             {
                 sb.Append(i);
             }
@@ -28,7 +28,7 @@ namespace Problems40to49
             //for (int i = 186; i <= 189; i++)
             //    Console.WriteLine(sb[i - 1]);
 
-            for (int i = 1; i <= 189; i++)
+            for (int i = 1; i < 2890; i++)
             {
                 int sbi = sb[i - 1] - (int)'0';
                 if (sbi != getChampernowneDigit(i))
@@ -38,6 +38,9 @@ namespace Problems40to49
                 }
             }
 
+            //for (int i = 2880; i <= 2889; i++)
+            //    Console.WriteLine(getChampernowneDigit(i));
+
             sw.Stop();
             Console.WriteLine("elapsed: {0} ms", sw.Elapsed.Milliseconds);
             return 0;
@@ -46,17 +49,22 @@ namespace Problems40to49
 
         private int getChampernowneDigit(int dn)
         {
+            // to solve the problem, we need to be able to get to d(1,000,000)
             Debug.Assert(dn > 0);
-            int d;
+            int d, dr;
             if (dn < 10)
                 return dn;
             if (dn < 190)
             {
                 d = 10 + (dn - 10) / 2;
-                if (isEven(dn))
-                    return d / 10;
-                else
-                    return d % 10;
+                dr = (dn - 10) % 2;
+                return d.ToString()[dr] - (int)'0';
+            }
+            if (dn < 2890)
+            {
+                d = 100 + (dn - 190) / 3;
+                dr = (dn - 190) % 3;
+                return d.ToString()[dr] - (int)'0';
             }
             throw new ArgumentOutOfRangeException("dn", "dn is too large.");
         }
