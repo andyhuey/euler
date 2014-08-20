@@ -15,7 +15,9 @@ namespace Problems40to49
 {
     class Problem41
     {
-        const int nMaxPandigital = 987654321;
+        // the digits in 987654321 add up to 45, which is divisible by 3, so no 9-digit pandigital # is going to be prime.
+        // and the digits in 87654321 add up to 36, which is divisible by 3, so no 8-digit pandigital # is going to be prime.
+        const int nMaxPandigital = 7654321;
         const int nPrimeMax = nMaxPandigital + 1;
         bool[] primes;
 
@@ -24,7 +26,7 @@ namespace Problems40to49
             int ans = 0;
             var sw = Stopwatch.StartNew();
 
-            // takes about 30 sec to get so many primes...
+            // takes a while to get so many primes...
             this.getPrimes();
 
             for (int i = nMaxPandigital; i > 1; i--)
