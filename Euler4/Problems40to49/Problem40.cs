@@ -1,7 +1,7 @@
 ﻿/*
  * http://projecteuler.net/problem=40
  * Champernowne's constant
- * Answer: 
+ * Answer: 210
  */
 using System;
 using System.Collections.Generic;
@@ -17,34 +17,17 @@ namespace Problems40to49
         {
             var sw = Stopwatch.StartNew();
 
-            // let's start with just a string...
-            StringBuilder sb = new StringBuilder();
-            for (int i = 1; i < 100000; i++)
-            {
-                sb.Append(i);
-            }
-            Console.WriteLine("sb is {0} digits long", sb.Length);
-
-            //for (int i = 186; i <= 189; i++)
-            //    Console.WriteLine(sb[i - 1]);
-
-            for (int i = 33000; i < 33100; i++)
-            {
-                int sbi = sb[i - 1] - (int)'0';
-                if (sbi != getChampernowneDigit(i))
-                {
-                    Console.WriteLine("digit {0}: {1} or {2}?", i, sbi, getChampernowneDigit(i));
-                    break;
-                }
-            }
-
-            for (int i = 5888000; i < 5888890; i++)
-                Console.WriteLine(getChampernowneDigit(i));
+            int ans = getChampernowneDigit(1)
+                * getChampernowneDigit(10)
+                * getChampernowneDigit(100)
+                * getChampernowneDigit(1000)
+                * getChampernowneDigit(10000)
+                * getChampernowneDigit(100000)
+                * getChampernowneDigit(1000000);
 
             sw.Stop();
             Console.WriteLine("elapsed: {0} ms", sw.Elapsed.Milliseconds);
-            return 0;
-
+            return ans;
         }
 
         private int getChampernowneDigit(int dn)
