@@ -14,17 +14,18 @@ namespace Problems40to49
 {
     class Problem44
     {
-        List<int> pentagon_nums;
-        const int seedTo = 1000;
+        List<long> pentagon_nums;
+        const int seedTo = 10000;
 
         public long soln1()
         {
             int ans = 0;
             var sw = Stopwatch.StartNew();
-            int s, d;
+            long s, d;
 
             // seed the first few.
-            pentagon_nums = new List<int>();
+            Console.WriteLine("Generating the first {0} numbers...", seedTo);
+            pentagon_nums = new List<long>();
             for (int i = 0; i <= seedTo; i++)
                 pentagon_nums.Add(pentagonNum(i));
 
@@ -32,6 +33,7 @@ namespace Problems40to49
             //    Console.WriteLine(pentagon_nums[i]);
 
             // let's work through some combinations.
+            Console.WriteLine("Working through combinations...");
             for (int j = 1; j <= seedTo; j++)
                 for (int k = j; k <= seedTo; k++)
                 {
@@ -52,12 +54,12 @@ namespace Problems40to49
             return ans;
         }
         
-        private int pentagonNum(int n)
+        private long pentagonNum(int n)
         {
             return n * (3 * n - 1) / 2;
         }
 
-        private bool isPentagonNum(int n)
+        private bool isPentagonNum(long n)
         {
             // do we have it in the list yet?
             while (n > pentagon_nums.Max())
