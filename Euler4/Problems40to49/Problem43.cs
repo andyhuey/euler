@@ -14,7 +14,7 @@ namespace Problems40to49
 {
     class Problem43
     {
-        List<string> allPandig;
+        List<string> goodPandig;
 
         public long soln1()
         {
@@ -22,17 +22,12 @@ namespace Problems40to49
             var sw = Stopwatch.StartNew();
 
             genPandig("");
+            Console.WriteLine("generated {0} numbers.", goodPandig.Count);
 
-            // generated 3265920 numbers.
-            Console.WriteLine("generated {0} numbers.", allPandig.Count);
-
-            foreach (string s in allPandig)
+            foreach (string s in goodPandig)
             {
-                if (meetsCriteria(s))
-                {
-                    ans += Convert.ToInt64(s);
-                    Console.WriteLine(s);
-                }
+                ans += Convert.ToInt64(s);
+                Console.WriteLine(s);
             }
 
             sw.Stop();
@@ -46,7 +41,7 @@ namespace Problems40to49
             // kick it off with the digits from 1-9
             if (s == "")
             {
-                allPandig = new List<string>();
+                goodPandig = new List<string>();
                 for (char ch = '1'; ch <= '9'; ch++)
                 {
                     genPandig(ch.ToString());
@@ -56,15 +51,17 @@ namespace Problems40to49
             // if it's 10 digits, we're done.
             if (s.Length == 10)
             {
-                allPandig.Add(s);
+                if (canMeetCriteria(s))
+                    goodPandig.Add(s);
                 return;
             }
             // otherwise, recurse.
             for (char ch = '0'; ch <= '9'; ch++)
             {
-                if (s.IndexOf(ch) >= 0)     // already used.
+                if (s.IndexOf(ch) >= 0)         // already used.
                     continue;
-                genPandig(s + ch);
+                if (canMeetCriteria(s + ch))    // don't recurse if this prefix won't work.
+                    genPandig(s + ch);
             }
         }
 
@@ -81,5 +78,36 @@ namespace Problems40to49
             }
             return true;
         }
+
+        private bool canMeetCriteria(string s)
+        {
+            // input is incomplete pandigital number.
+            // return true if a number starting with this sequence _can_ meet the criteria.
+            int substr;
+            int[] divis_by = new int[7] { 2, 3, 5, 7, 11, 13, 17 };
+            for (int i = 0; i < 7; i++)
+            {
+                if (s.Length >= i + 4)
+                {
+                    substr = Int32.Parse(s.Substring(i + 1, 3));
+                    if (substr % divis_by[i] != 0)
+                        return false;
+                }
+            }
+            return true;
+
+        }
     }
 }
+/*
+generated 6 numbers.
+1406357289
+1430952867
+1460357289
+4106357289
+4130952867
+4160357289
+elapsed: 0 sec
+The answer is 16,695,334,890 or 16695334890
+Press enter...
+*/
