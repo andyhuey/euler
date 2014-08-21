@@ -14,47 +14,50 @@ namespace Problems40to49
 {
     class Problem43
     {
-        List<string> allPandig;
+        IEnumerable<string> allPandig;
 
         public long soln1()
         {
             int ans = 0;
             var sw = Stopwatch.StartNew();
-            
-            genPandig("");
 
-            Console.WriteLine("generated {0} numbers.", allPandig.Count);
-            //foreach (string s in allPandig)
-            //    Console.WriteLine(s);
+            allPandig = genPandig("").ToList();
+
+            //Console.WriteLine("generated {0} numbers.", allPandig.Count);
+            foreach (string s in allPandig)
+                Console.WriteLine(s);
 
             sw.Stop();
             Console.WriteLine("elapsed: {0} sec", sw.Elapsed.Seconds);
             return ans;
         }
 
-        private void genPandig(string s)
+        private IEnumerable<string> genPandig(string s)
         {
             //Console.WriteLine("Called with {0}.", s);
             // kick it off with the digits from 1-9
             if (s == "")
             {
-                allPandig = new List<string>();
+                //allPandig = new List<string>();
                 for (char ch = '1'; ch <= '9'; ch++)
-                    genPandig(ch.ToString());
-                return;
+                {
+                    foreach (var x in genPandig(ch.ToString())) yield return x;
+                }
+                //return;
             }
             // if it's 10 digits, we're done.
             if (s.Length == 10)
             {
-                allPandig.Add(s);
-                return;
+                yield return s;
+                //allPandig.Add(s);
+                //return;
             }
             // otherwise, recurse.
             for (char ch = '0'; ch <= '9'; ch++)
             {
                 if (s.IndexOf(ch) >= 0)     // already used.
                     continue;
-                genPandig(s + ch);
+                foreach (var x in genPandig(s + ch)) yield return x;
             }
         }
     }
