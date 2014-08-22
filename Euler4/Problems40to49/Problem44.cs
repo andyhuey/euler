@@ -15,7 +15,7 @@ namespace Problems40to49
     class Problem44
     {
         List<long> pentagon_nums;
-        const int seedTo = 10000;
+        const int seedTo = 1000;
 
         public long soln1()
         {
@@ -35,6 +35,9 @@ namespace Problems40to49
             // let's work through some combinations.
             Console.WriteLine("Working through combinations...");
             for (int j = 1; j <= seedTo; j++)
+            {
+                if (j % 10 == 0)
+                    Console.WriteLine("j={0}", j);
                 for (int k = j; k <= seedTo; k++)
                 {
                     if (j == k)
@@ -43,11 +46,20 @@ namespace Problems40to49
                     d = pentagon_nums[k] - pentagon_nums[j];
                     //if (j==4 && k==7)
                     //    Console.WriteLine("P({0})={1}, P({2})={3}, D={4}", j, pentagon_nums[j], k, pentagon_nums[k], d);
+                    //if (isPentagonNum(s))
+                    //    Console.WriteLine("P({0})={1}, P({2})={3} - sum is a pentagon #.", j, pentagon_nums[j], k, pentagon_nums[k]);
+                    //if (isPentagonNum(d))
+                    //    Console.WriteLine("P({0})={1}, P({2})={3} - diff is a pentagon #.", j, pentagon_nums[j], k, pentagon_nums[k]);
+
                     if (isPentagonNum(d) && isPentagonNum(s))
                     {
                         Console.WriteLine("P({0})={1}, P({2})={3}, D={4}", j, pentagon_nums[j], k, pentagon_nums[k], d);
                     }
                 }
+            }
+
+            // up to 1386 for 1000 checks.
+            Console.WriteLine("We calculated up to p({0}).", pentagon_nums.Count);
 
             sw.Stop();
             Console.WriteLine("elapsed: {0} sec", sw.Elapsed.Seconds);
@@ -62,6 +74,8 @@ namespace Problems40to49
         private bool isPentagonNum(long n)
         {
             // do we have it in the list yet?
+            if (n > pentagon_nums.Max())
+                Console.WriteLine("Generating thru p(n)={0:n0}...", n);
             while (n > pentagon_nums.Max())
             {
                 int i = pentagon_nums.Count;
