@@ -1,7 +1,8 @@
 ﻿/*
  * http://projecteuler.net/problem=44
  * Pentagon numbers
- * Answer: 
+ * The answer is 5,482,660 or 5482660
+ * P(1020)=1560090, P(2167)=7042750, D=5482660
  */
 using System;
 using System.Collections.Generic;
@@ -15,13 +16,17 @@ namespace Problems40to49
     class Problem44
     {
         List<long> pentagon_nums;
-        const int seedTo = 1000;
+        const int seedTo = 10000;
 
         public long soln1()
         {
-            int ans = 0;
+            long diff_min = Int64.MaxValue;
             var sw = Stopwatch.StartNew();
             long s, d;
+
+            //for (int i = 0; i <= 25; i++)
+            //    Console.WriteLine("{0}: {1}", i, isPentagonNum(i));
+            //return 0;
 
             // seed the first few.
             Console.WriteLine("Generating the first {0} numbers...", seedTo);
@@ -36,7 +41,7 @@ namespace Problems40to49
             Console.WriteLine("Working through combinations...");
             for (int j = 1; j <= seedTo; j++)
             {
-                if (j % 10 == 0)
+                if (j % 1000 == 0)
                     Console.WriteLine("j={0}", j);
                 for (int k = j; k <= seedTo; k++)
                 {
@@ -54,16 +59,17 @@ namespace Problems40to49
                     if (isPentagonNum(d) && isPentagonNum(s))
                     {
                         Console.WriteLine("P({0})={1}, P({2})={3}, D={4}", j, pentagon_nums[j], k, pentagon_nums[k], d);
+                        diff_min = Math.Min(diff_min, d);
                     }
                 }
             }
 
             // up to 1386 for 1000 checks.
-            Console.WriteLine("We calculated up to p({0}).", pentagon_nums.Count);
+            //Console.WriteLine("We calculated up to p({0}).", pentagon_nums.Count);
 
             sw.Stop();
             Console.WriteLine("elapsed: {0} sec", sw.Elapsed.Seconds);
-            return ans;
+            return diff_min;
         }
         
         private long pentagonNum(int n)
@@ -71,7 +77,14 @@ namespace Problems40to49
             return n * (3 * n - 1) / 2;
         }
 
-        private bool isPentagonNum(long n)
+        private bool isPentagonNum(long x)
+        {
+            // from http://www.mathblog.dk/project-euler-44-smallest-pair-pentagonal-numbers/
+            double dn = (Math.Sqrt(24 * x + 1) + 1) / 6;
+            return dn == (int)dn;
+        }
+
+        private bool isPentagonNum_old(long n)
         {
             // do we have it in the list yet?
             if (n > pentagon_nums.Max())
