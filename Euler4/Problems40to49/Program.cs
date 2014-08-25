@@ -10,7 +10,7 @@ namespace Problems40to49
     {
         static void Main(string[] args)
         {
-            var myProblem = new Problem45();
+            var myProblem = new Problem46();
             Console.WriteLine("The answer is {0:n0} or {0}", myProblem.soln1());
 
             Console.WriteLine("Press enter...");
