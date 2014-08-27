@@ -2,7 +2,7 @@
  * http://projecteuler.net/problem=46
  * Goldbach's other conjecture
  * What is the smallest odd composite that cannot be written as the sum of a prime and twice a square?
- * 
+ * The answer is 5777.
  */
 using System;
 using System.Collections.Generic;
@@ -32,22 +32,25 @@ namespace Problems40to49
 
             // start at 9 (= 7 + 2 * 1^2)
             int nCandidate = 9;
+            int nPrime = 2;
             while (true)
             {
-                int nPrime = 2;
+                //Console.WriteLine("\tCandidate={0}, prime={1}", nCandidate, nPrime);
                 if (isSquare((nCandidate - nPrime) / 2))
                 {
-                    ans = nCandidate;
-                    break;
+                    Console.WriteLine("{0} works.", nCandidate);
+                    // get next odd composite #, and go again.
+                    nPrime = 2;
+                    nCandidate = getNextCandidate(nCandidate);
                 }
                 // try next prime that's < nCandidate.
                 nPrime = getNextPrime(nPrime);
 
-                // if no more primes to try, nCandidate = next odd composite #.
+                // if no more primes to try, we're done, I think.
                 if (nPrime >= nCandidate)
                 {
-                    nPrime = 2;
-                    nCandidate = getNextCandidate(nCandidate);
+                    ans = nCandidate;
+                    break;
                 }
             }
 
@@ -58,7 +61,8 @@ namespace Problems40to49
 
         private bool isSquare(int n)
         {
-            return Math.Sqrt(n) == n;
+            double d = Math.Sqrt(n);
+            return d == (int)d;
         }
 
         private int getNextPrime(int n)
@@ -70,7 +74,8 @@ namespace Problems40to49
         private int getNextCandidate(int nCandidate)
         {
             // return the next odd composite #.
-            throw new NotImplementedException();
+            while (isPrime(++nCandidate)) ;
+            return nCandidate;
         }
 
         // copied from problem 37.
