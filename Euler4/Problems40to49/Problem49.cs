@@ -27,14 +27,11 @@ namespace Problems40to49
             //Console.WriteLine(this.isPermutation(1234, 2341));
 
             this.getPrimes();
+            List<int> lstPrimes = Enumerable.Range(1001, 8998).Where(x => primes[x]).ToList();
 
-            for (int i = 1001; i < nPrimeMax; i++)
+            foreach (int i in lstPrimes)
             {
-                // is it prime?
-                if (!primes[i])
-                    continue;
-
-                for (int j = i + 1; j < nPrimeMax; j++)
+                foreach (int j in lstPrimes.Where(x => x > i))
                 {
                     if (!primes[j])
                         continue;
