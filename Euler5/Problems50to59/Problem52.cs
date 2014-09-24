@@ -1,6 +1,7 @@
 ﻿/*
  * https://projecteuler.net/problem=52
  * Permuted multiples
+ * Note: N must be at least 6 digits, and must be divisible by 9.
  * The answer is 142,857
  */
 using System;
@@ -21,8 +22,9 @@ namespace Problems50to59
         {
             var sw = Stopwatch.StartNew();
 
-            long n = 0;
-            while (++n < MAX_N)
+            long n = 100008;        // first 6-digit # divisible by 9
+
+            while (n < MAX_N)
             {
                 int m;
                 for (m = 2; m <= MAX_M; m++)
@@ -33,6 +35,7 @@ namespace Problems50to59
                 }
                 if (m > MAX_M)
                     return n;
+                n += 9;
             }
 
 
