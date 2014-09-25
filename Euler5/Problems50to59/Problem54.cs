@@ -2,7 +2,7 @@
  * https://projecteuler.net/problem=54
  * Poker hands
  * Ref: http://en.wikipedia.org/wiki/List_of_poker_hands
- * The answer is NOT 378.
+ * The answer is 376.
  */
 using System;
 using System.Collections.Generic;
@@ -25,10 +25,12 @@ namespace Problems50to59
             //return 0;
 
             string[] cards_data = File.ReadAllLines(
-            @"C:\Users\ahuey\Documents\Visual Studio 2012\Projects\Euler\Euler5\Problems50to59\p054_poker.txt");
-
+            @"C:\Users\ahuey\Documents\Visual Studio 2012\Projects\Euler\Euler5\Problems50to59\p054_poker.txt");            
+            Console.WriteLine("Read {0} lines.", cards_data.Length);
+            
             foreach (string line in cards_data)
             {
+                Console.WriteLine(line);
                 p1wins += processRound(line);
             }
 
@@ -42,7 +44,7 @@ namespace Problems50to59
             Hand testHand = new Hand();
             //string sHand = "TC JC QC KC AC";
             //string sHand = "3C 4C 5C 6C 7C";
-            string sHand = "3C 3S 9H 4D 4C";
+            string sHand = "3C 2S 5H 4D 6C";
             string[] cards = sHand.Split(' ');
             foreach (string sc in cards)
             {
@@ -50,16 +52,18 @@ namespace Problems50to59
                 Console.WriteLine(c.ToString());
                 testHand.AddCard(c);
             }
-            Console.WriteLine("Royal flush: {0}", testHand.isRoyalFlush());
-            Console.WriteLine("Straight flush: {0}", testHand.isStraightFlush());
-            Console.WriteLine("Four of a kind: {0}", testHand.isFourOfAKind());
-            Console.WriteLine("Full house: {0}", testHand.isFullHouse());
-            Console.WriteLine("Flush: {0}", testHand.isFlush());
             Console.WriteLine("Straight: {0}", testHand.isStraight());
-            Console.WriteLine("Three of a kind: {0}", testHand.isThreeOfAKind());
-            Console.WriteLine("Two pair: {0}", testHand.isTwoPair());
-            Console.WriteLine("high card: {0}", testHand.getHighCard());
-            Console.WriteLine("SCORE: {0}", testHand.GetHandValue());
+
+            //Console.WriteLine("Royal flush: {0}", testHand.isRoyalFlush());
+            //Console.WriteLine("Straight flush: {0}", testHand.isStraightFlush());
+            //Console.WriteLine("Four of a kind: {0}", testHand.isFourOfAKind());
+            //Console.WriteLine("Full house: {0}", testHand.isFullHouse());
+            //Console.WriteLine("Flush: {0}", testHand.isFlush());
+            //Console.WriteLine("Straight: {0}", testHand.isStraight());
+            //Console.WriteLine("Three of a kind: {0}", testHand.isThreeOfAKind());
+            //Console.WriteLine("Two pair: {0}", testHand.isTwoPair());
+            //Console.WriteLine("high card: {0}", testHand.getHighCard());
+            //Console.WriteLine("SCORE: {0}", testHand.GetHandValue());
         }
 
         private int processRound(string line)
@@ -69,26 +73,43 @@ namespace Problems50to59
             string[] cards = line.Split(' ');
             if (cards.Length != 10)
                 throw new Exception("input line does not contain 10 cards.");
+
             Hand p1hand = new Hand();
             for (int i = 0; i < 5; i++)
                 p1hand.AddCard(cards[i]);
             Hand p2hand = new Hand();
             for (int i = 5; i < 10; i++)
                 p2hand.AddCard(cards[i]);
+
             // now, compare the hands.
             int p1score = p1hand.GetHandValue();
             int p2score = p2hand.GetHandValue();
             // tiebreaker
             if (p1score == p2score)
             {
+                //Console.WriteLine("Initial tie...");
+                //Console.WriteLine("P1: {0} - {1}", p1score, p1hand.ToString());
+                //Console.WriteLine("P2: {0} - {1}", p2score, p2hand.ToString());
+                //Console.ReadLine();
                 p1score = p1hand.getHighCard();
                 p2score = p2hand.getHighCard();
+                //Console.WriteLine("P1: {0} - {1}", p1score, p1hand.ToString());
+                //Console.WriteLine("P2: {0} - {1}", p2score, p2hand.ToString());
+                //Console.ReadLine();
             }
             // still?
             if (p1score == p2score)
             {
                 throw new Exception("Unexpected tie.");
             }
+
+            //if (p1score >= 500 || p2score >= 500)
+            //{
+            //    Console.WriteLine("P1: {0} - {1}", p1score, p1hand.ToString());
+            //    Console.WriteLine("P2: {0} - {1}", p2score, p2hand.ToString());
+            //    Console.ReadLine();
+            //}
+
             // p1 wins.
             if (p1score > p2score)
                 return 1;
@@ -180,6 +201,11 @@ namespace Problems50to59
             this.AddCard(card);
         }
 
+        public override string ToString()
+        {
+            return string.Join(", ", cards.Select(x => x.ToString()));
+        }
+
         public int GetHandValue()
         {
             int v;
@@ -241,7 +267,7 @@ namespace Problems50to59
         public int isFourOfAKind()
         {
             // Four cards of the same value.
-            var q = cards.GroupBy(x => x.Value).Where(x => x.Count() >= 4).OrderByDescending(x => x.Key);
+            var q = cards.GroupBy(x => x.Value).Where(x => x.Count() == 4).OrderByDescending(x => x.Key);
             if (q.Any())
                 return q.First().Key;
             else
@@ -269,7 +295,8 @@ namespace Problems50to59
         public bool isStraight()
         {
             // All cards are consecutive values.
-            int i = cards[0].Value;
+            int i = cards.Min(x => x.Value);
+                //cards[0].Value;
             foreach (Card c in cards.OrderBy(x => x.Value))
                 if (c.Value != i++)
                     return false;
