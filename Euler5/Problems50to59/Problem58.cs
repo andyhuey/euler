@@ -29,21 +29,14 @@ namespace Problems50to59
         {
             var sw = Stopwatch.StartNew();
 
-            int gridSize = 1;
-            int ratio;
-            do
-            {
-                gridSize += 2;
-                ratio = processGrid(gridSize);
-                //Console.ReadLine();
-            } while (ratio > 10);
+            int gridSize = processGrid(1000);
 
             sw.Stop();
             Console.WriteLine("elapsed: {0} ms", sw.Elapsed.TotalMilliseconds);
             return gridSize;
         }
 
-        private int processGrid(int gridSize)
+        private int processGrid(int maxGridSize)
         {
             int nPrimes = 0;
             int nDiagCells = 0;
@@ -53,7 +46,7 @@ namespace Problems50to59
             int steps = 0;
             int counter = 1;
 
-            while (counter <= gridSize * gridSize)
+            while (counter <= maxGridSize * maxGridSize)
             {
                 // set the cell value: (not really necessary)
                 //gridValues[x, y] = counter;
@@ -72,6 +65,15 @@ namespace Problems50to59
                         x++;
                         if (steps == increment)
                         {
+                            //Console.WriteLine("steps={0}, increment={1}, x={2}, y={3}, counter={4}", steps, increment, x, y, counter);
+                            if (counter > 1)
+                            {
+                                double ratio = (double)nPrimes / nDiagCells;
+                                Console.WriteLine("For grid size {0}, result is {1}/{2} or {3:0}%", increment, nPrimes, nDiagCells, ratio*100);
+                                //Console.ReadLine();
+                                if (ratio < 0.10)
+                                    return increment;
+                            }
                             steps = 0;
                             dir = Direction.Up;
                         }
@@ -106,9 +108,8 @@ namespace Problems50to59
                 }
                 counter++;
             }
-            int ratio = (int)Math.Round(100 * (float)nPrimes / nDiagCells);
-            Console.WriteLine("For grid size {0}, result is {1}/{2} or {3}%", gridSize, nPrimes, nDiagCells, ratio);
-            return ratio;
+            // we failed...
+            return 0;
         }
 
         private bool isPrime(int n)
