@@ -1,7 +1,7 @@
 ﻿/*
  * https://projecteuler.net/problem=57
  * Square root convergents
- * 
+ * The answer is 153.
  */
 using System;
 using System.Collections.Generic;
