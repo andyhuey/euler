@@ -14,16 +14,17 @@ namespace Problems50to59
 {
     class Problem58
     {
-        private List<bool> primes = new List<bool>();
-        const int INCR = 20000;
+        // switch to a HashSet to avoid out-of-memory errors.
+        private HashSet<int> primes = new HashSet<int>();
+        int nOldMax;
+        const int INCR = 100000;
         const int MAX_GRID = 25000;
         enum Direction { Right, Down, Left, Up };
 
         public Problem58()
         {
             // zero and one aren't prime.
-            primes.Add(false);
-            primes.Add(false);
+            nOldMax = 2;
         }
 
         public long soln1()
@@ -31,7 +32,7 @@ namespace Problems50to59
             var sw = Stopwatch.StartNew();
 
             // fill in the prime array
-            isPrime(MAX_GRID * MAX_GRID);
+            //isPrime(MAX_GRID * MAX_GRID);
 
             int gridSize = processGrid(MAX_GRID);
 
@@ -121,9 +122,8 @@ namespace Problems50to59
             if (n < 0)
                 return false;
 
-            int nOldMax = this.primes.Count();
             if (n < nOldMax)
-                return this.primes[n];
+                return primes.Contains(n);
 
             int p = 2;      // NOTE: we shouldn't always start at 2. I'm repeating work I've already done...
             int nPrimeMax = nOldMax;
@@ -137,24 +137,25 @@ namespace Problems50to59
             Console.WriteLine("Filling in primes from {0} to {1}.", nOldMax, nPrimeMax);
 
             for (int i = nOldMax; i < nPrimeMax; i++)
-                primes.Add(true);
+                primes.Add(i);
 
             while (p <= sqrt_max)
             {
                 // cross out all the multiple of p.
                 for (int i = p * p; i < nPrimeMax; i += p)
                 {
-                    primes[i] = false;
+                    primes.Remove(i);
                 }
 
                 // get the next p.
                 do
                 {
                     p++;
-                } while (!primes[p]);
+                } while (!primes.Contains(p));
             }
+            nOldMax = nPrimeMax;
             // now, check the number we asked for.
-            return primes[n];
+            return primes.Contains(n);
         }
     }
 }
