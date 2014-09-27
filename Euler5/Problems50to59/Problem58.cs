@@ -15,7 +15,8 @@ namespace Problems50to59
     class Problem58
     {
         private List<bool> primes = new List<bool>();
-        const int INCR = 1000;
+        const int INCR = 20000;
+        const int MAX_GRID = 25000;
         enum Direction { Right, Down, Left, Up };
 
         public Problem58()
@@ -29,7 +30,10 @@ namespace Problems50to59
         {
             var sw = Stopwatch.StartNew();
 
-            int gridSize = processGrid(1000);
+            // fill in the prime array
+            isPrime(MAX_GRID * MAX_GRID);
+
+            int gridSize = processGrid(MAX_GRID);
 
             sw.Stop();
             Console.WriteLine("elapsed: {0} ms", sw.Elapsed.TotalMilliseconds);
@@ -130,7 +134,7 @@ namespace Problems50to59
 
             int sqrt_max = (int)Math.Floor(Math.Sqrt(nPrimeMax));
 
-            //Console.WriteLine("Filling in primes from {0} to {1}.", nOldMax, nPrimeMax);
+            Console.WriteLine("Filling in primes from {0} to {1}.", nOldMax, nPrimeMax);
 
             for (int i = nOldMax; i < nPrimeMax; i++)
                 primes.Add(true);
