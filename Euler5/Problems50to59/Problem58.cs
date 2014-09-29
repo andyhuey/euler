@@ -45,74 +45,38 @@ namespace Problems50to59
         {
             int nPrimes = 0;
             int nDiagCells = 0;
-            int x = 0, y = 0;
-            Direction dir = Direction.Right;
-            int increment = 1;
-            int steps = 0;
-            int counter = 1;
+            int n = 1;
 
-            while (counter <= maxGridSize * maxGridSize)
+            while (n < maxGridSize)
             {
-                // set the cell value: (not really necessary)
-                //gridValues[x, y] = counter;
-                // is this cell on a diagonal?
-                if (Math.Abs(x) == Math.Abs(y))
+                if (n == 1)
                 {
+                    // 1 isn't prime.
                     nDiagCells++;
-                    if (isPrime(counter))
+                    n += 2;
+                    continue;
+                }
+                int[] corner = new int[3];
+                corner[0] = n * n - 3 * n + 3;  // upper-right
+                corner[1] = n * n - 2 * n + 2;  // upper-left
+                corner[2] = n * n - n + 1;      // lower-left
+                //corner[3] = n * n;              // lower-right - never prime, of course.
+                nDiagCells++;
+                foreach (int v in corner)
+                {
+                    //Console.Write(v);
+                    nDiagCells++;
+                    if (isPrime(v))
                         nPrimes++;
                 }
-                // logic to move to next cell:
-                steps++;
-                switch (dir)
-                {
-                    case Direction.Right:
-                        x++;
-                        if (steps == increment)
-                        {
-                            //Console.WriteLine("steps={0}, increment={1}, x={2}, y={3}, counter={4}", steps, increment, x, y, counter);
-                            if (counter > 1)
-                            {
-                                double ratio = (double)nPrimes / nDiagCells;
-                                Console.WriteLine("For grid size {0}, result is {1}/{2} or {3:0}%", increment, nPrimes, nDiagCells, ratio*100);
-                                //Console.ReadLine();
-                                if (ratio < 0.10)
-                                    return increment;
-                            }
-                            steps = 0;
-                            dir = Direction.Up;
-                        }
-                        break;
-                    case Direction.Down:
-                        y--;
-                        if (steps == increment)
-                        {
-                            steps = 0;
-                            dir = Direction.Right;
-                            increment++;
-                        }
-                        break;
-                    case Direction.Left:
-                        x--;
-                        if (steps == increment)
-                        {
-                            steps = 0;
-                            dir = Direction.Down;
-                        }
-                        break;
-                    case Direction.Up:
-                        y++;
-                        if (steps == increment)
-                        {
-                            steps = 0;
-                            dir = Direction.Left;
-                            increment++;
-                        }
-                        break;
-
-                }
-                counter++;
+                double ratio = (double)nPrimes / nDiagCells;
+                Console.WriteLine("For grid size {0}, result is {1}/{2} or {3:0}%", n, nPrimes, nDiagCells, ratio * 100);
+                //Console.ReadLine();
+                if (ratio < 0.10)
+                    return n;
+                n += 2;
             }
+
             // we failed...
             return 0;
         }
