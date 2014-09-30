@@ -14,17 +14,12 @@ namespace Problems50to59
 {
     class Problem58
     {
-        // switch to a HashSet to avoid out-of-memory errors.
-        private HashSet<int> primes = new HashSet<int>();
-        int nOldMax;
-        const int INCR = 100000;
         const int MAX_GRID = 25000;
-        enum Direction { Right, Down, Left, Up };
+        Random r;
 
         public Problem58()
         {
-            // zero and one aren't prime.
-            nOldMax = 2;
+            r = new Random();
         }
 
         public long soln1()
@@ -33,6 +28,14 @@ namespace Problems50to59
 
             // fill in the prime array
             //isPrime(MAX_GRID * MAX_GRID);
+
+            for (int i = 1; i < 100; i++)
+            {
+                Console.WriteLine("{0}: {1}", i, isProbablyPrime(i));
+                if (i % 10 == 0)
+                    Console.ReadLine();
+            }
+            return 0;
 
             int gridSize = processGrid(MAX_GRID);
 
@@ -66,12 +69,12 @@ namespace Problems50to59
                 {
                     //Console.Write(v);
                     nDiagCells++;
-                    if (isPrime(v))
+                    if (isProbablyPrime(v))
                         nPrimes++;
                 }
                 double ratio = (double)nPrimes / nDiagCells;
                 Console.WriteLine("For grid size {0}, result is {1}/{2} or {3:0}%", n, nPrimes, nDiagCells, ratio * 100);
-                //Console.ReadLine();
+                Console.ReadLine();
                 if (ratio < 0.10)
                     return n;
                 n += 2;
@@ -81,45 +84,39 @@ namespace Problems50to59
             return 0;
         }
 
-        private bool isPrime(int n)
+        private bool isProbablyPrime(int n)
         {
-            if (n < 0)
+            // ** this ain't right. **
+            // Miller-Rabin test
+            // from http://rosettacode.org/wiki/Miller-Rabin_primality_test#C.23
+            // zero and one aren't prime.
+            if (n < 2)
                 return false;
+            // even numbers > 2 aren't prime.
+            if (n != 2 && n % 2 == 0)
+                return false;
+            
+            int s = n - 1;
+            while (s % 2 == 0)
+                s >>= 1;
 
-            if (n < nOldMax)
-                return primes.Contains(n);
-
-            int p = 2;      // NOTE: we shouldn't always start at 2. I'm repeating work I've already done...
-            int nPrimeMax = nOldMax;
-            do
+            int k = n * n;     // I have no idea what this should be...
+            for (int i = 0; i < k; i++)
             {
-                nPrimeMax += INCR;
-            } while (nPrimeMax < n);
-
-            int sqrt_max = (int)Math.Floor(Math.Sqrt(nPrimeMax));
-
-            Console.WriteLine("Filling in primes from {0} to {1}.", nOldMax, nPrimeMax);
-
-            for (int i = nOldMax; i < nPrimeMax; i++)
-                primes.Add(i);
-
-            while (p <= sqrt_max)
-            {
-                // cross out all the multiple of p.
-                for (int i = p * p; i < nPrimeMax; i += p)
+                double a = r.Next((int)n - 1) + 1;
+                int temp = s;
+                int mod = (int)Math.Pow(a, (double)temp) % n;
+                while (temp != n - 1 && mod != 1 && mod != n - 1)
                 {
-                    primes.Remove(i);
+                    mod = (mod * mod) % n;
+                    temp = temp * 2;
                 }
-
-                // get the next p.
-                do
+                if (mod != n - 1 && temp % 2 == 0)
                 {
-                    p++;
-                } while (!primes.Contains(p));
+                    return false;
+                }
             }
-            nOldMax = nPrimeMax;
-            // now, check the number we asked for.
-            return primes.Contains(n);
+            return true;
         }
     }
 }
