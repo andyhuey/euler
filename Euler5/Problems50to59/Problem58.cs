@@ -2,6 +2,7 @@
  * https://projecteuler.net/problem=58
  * Spiral primes
  * (see problem 28)
+ * The answer is 26,241
  */
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace Problems50to59
 {
     class Problem58
     {
-        const int MAX_GRID = 25000;
+        const int MAX_GRID = 30000;
         Random r;
 
         public Problem58()
@@ -29,13 +30,13 @@ namespace Problems50to59
             // fill in the prime array
             //isPrime(MAX_GRID * MAX_GRID);
 
-            for (int i = 1; i < 100; i++)
-            {
-                Console.WriteLine("{0}: {1}", i, isProbablyPrime(i));
-                if (i % 10 == 0)
-                    Console.ReadLine();
-            }
-            return 0;
+            //for (int i = 1; i < 100; i++)
+            //{
+            //    Console.WriteLine("{0}: {1}", i, isProbablyPrime(i));
+            //    if (i % 10 == 0)
+            //        Console.ReadLine();
+            //}
+            //return 0;
 
             int gridSize = processGrid(MAX_GRID);
 
@@ -69,12 +70,12 @@ namespace Problems50to59
                 {
                     //Console.Write(v);
                     nDiagCells++;
-                    if (isProbablyPrime(v))
+                    if (isPrime(v))
                         nPrimes++;
                 }
                 double ratio = (double)nPrimes / nDiagCells;
                 Console.WriteLine("For grid size {0}, result is {1}/{2} or {3:0}%", n, nPrimes, nDiagCells, ratio * 100);
-                Console.ReadLine();
+                //Console.ReadLine();
                 if (ratio < 0.10)
                     return n;
                 n += 2;
@@ -82,6 +83,17 @@ namespace Problems50to59
 
             // we failed...
             return 0;
+        }
+
+        private bool isPrime(int n)
+        {
+            // simple prime test.
+            for (int i = 2; i <= Math.Sqrt(n); i++)
+            {
+                if (n % i == 0)
+                    return false;
+            }
+            return true;
         }
 
         private bool isProbablyPrime(int n)
