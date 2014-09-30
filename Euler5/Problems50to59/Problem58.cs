@@ -27,17 +27,6 @@ namespace Problems50to59
         {
             var sw = Stopwatch.StartNew();
 
-            // fill in the prime array
-            //isPrime(MAX_GRID * MAX_GRID);
-
-            //for (int i = 1; i < 100; i++)
-            //{
-            //    Console.WriteLine("{0}: {1}", i, isProbablyPrime(i));
-            //    if (i % 10 == 0)
-            //        Console.ReadLine();
-            //}
-            //return 0;
-
             int gridSize = processGrid(MAX_GRID);
 
             sw.Stop();
@@ -96,39 +85,5 @@ namespace Problems50to59
             return true;
         }
 
-        private bool isProbablyPrime(int n)
-        {
-            // ** this ain't right. **
-            // Miller-Rabin test
-            // from http://rosettacode.org/wiki/Miller-Rabin_primality_test#C.23
-            // zero and one aren't prime.
-            if (n < 2)
-                return false;
-            // even numbers > 2 aren't prime.
-            if (n != 2 && n % 2 == 0)
-                return false;
-            
-            int s = n - 1;
-            while (s % 2 == 0)
-                s >>= 1;
-
-            int k = n * n;     // I have no idea what this should be...
-            for (int i = 0; i < k; i++)
-            {
-                double a = r.Next((int)n - 1) + 1;
-                int temp = s;
-                int mod = (int)Math.Pow(a, (double)temp) % n;
-                while (temp != n - 1 && mod != 1 && mod != n - 1)
-                {
-                    mod = (mod * mod) % n;
-                    temp = temp * 2;
-                }
-                if (mod != n - 1 && temp % 2 == 0)
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
     }
 }
