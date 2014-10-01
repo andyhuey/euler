@@ -15,6 +15,7 @@ namespace Problems60to69
     {
         bool[] primes;
         const int nPrimeMax = 1000000;
+        const int nMax = 1000;
 
         public long soln1()
         {
@@ -22,11 +23,30 @@ namespace Problems60to69
 
             getPrimes();
 
-            Console.WriteLine(isPrimePairSet(new int[] { 3, 7, 109, 673 }));
+            IEnumerable<int> lstPrimes = Enumerable.Range(2, nMax).Where(x => primes[x]);
+
+            //Console.WriteLine(isPrimePairSet(new int[] { 3, 7, 109, 673 }));
+            int minSum = nMax * 4;
+
+            foreach (int n1 in lstPrimes)
+                foreach (int n2 in lstPrimes.Where(x => x > n1))
+                    foreach (int n3 in lstPrimes.Where(x => x > n2))
+                        foreach (int n4 in lstPrimes.Where(x => x > n3))
+                        {
+                            //Console.WriteLine("{0}, {1}, {2}, {3}", n1, n2, n3, n4);
+                            int[] currSet = new int[] { n1, n2, n3, n4 };
+                            if (isPrimePairSet(currSet))
+                            {
+                                int currSum = n1 + n2 + n3 + n4;
+                                Console.WriteLine("{0}, {1}, {2}, {3} -> {4}", n1, n2, n3, n4, currSum);
+                                if (minSum > currSum)
+                                    minSum = currSum;
+                            }
+                        }
 
             sw.Stop();
             Console.WriteLine("elapsed: {0} ms", sw.Elapsed.TotalMilliseconds);
-            return 0;
+            return minSum;
         }
 
         private bool isPrimePairSet(int[] myset)
@@ -43,7 +63,7 @@ namespace Problems60to69
                     int ji = Int32.Parse(sj + si);
                     if (!isPrime(ij) || !isPrime(ji))
                         return false;
-                    Console.WriteLine("{0}, {1}", ij, ji);
+                    //Console.WriteLine("{0}, {1}", ij, ji);
                 }
             }
             return true;
