@@ -24,56 +24,65 @@ namespace Problems50to59
             var inputData = getInputData();
             Console.WriteLine("Read {0} values.", inputData.Count());
 
-            int[] thePassword = new int[] {(int)'g', (int)'o', (int)'d'};
-            return getDecryptSum(thePassword, inputData);
+            //int[] thePassword = new int[] {(int)'g', (int)'o', (int)'d'};
+            //return getDecryptSum(thePassword, inputData);
 
             var possPws = getAllPasswords();
             Console.WriteLine("Generated {0} possible passwords.", possPws.Count());
 
+            int nspacesMax = 0;
+            int[] hldpw = new int[3];
+
             foreach (var pw in possPws)
             {
-                if (isPossiblePw(pw, inputData))
+                int nspaces;
+                if (isPossiblePw(pw, inputData, out nspaces))
                 {
                     possiblePws++;
-                    printDecrypt(pw, inputData);
-                    if (possiblePws % 20 == 0)
-                        Console.ReadLine();
+                    if (nspaces > nspacesMax)
+                    {
+                        nspacesMax = nspaces;
+                        hldpw = pw;
+                    }
+                    //printDecrypt(pw, inputData);
+                    //if (possiblePws % 20 == 0)
+                    //    Console.ReadLine();
                 }
             }
             Console.WriteLine("possible passwords: {0}", possiblePws);
 
+            Console.WriteLine("Password is probably: {0}", new string(hldpw.Select(x => (char)x).ToArray()));
+            int sum = getDecryptSum(hldpw, inputData);
+
             sw.Stop();
             Console.WriteLine("elapsed: {0} ms", sw.Elapsed.TotalMilliseconds);
-            return 0;
+            return sum;
         }
 
         private IEnumerable<int> getInputData()
         {
             int i;
-            string[] inpLines = File.ReadAllLines(
+            string inputText = File.ReadAllText(
             @"C:\Users\ahuey\Documents\Visual Studio 2012\Projects\Euler\Euler5\Problems50to59\p059_cipher.txt");
-            foreach (string line in inpLines)
+            foreach (string s in inputText.Split(','))
             {
-                foreach (string s in line.Split(','))
-                {
-                    if (int.TryParse(s, out i))
-                        yield return i;
-                }
+                if (int.TryParse(s, out i))
+                    yield return i;
             }
         }
 
         private IEnumerable<int[]> getAllPasswords()
         {
-            IEnumerable<char> lcLtrs = Enumerable.Range((int)'a', 26).Select(x => (char)x);
-            //Console.WriteLine("{0} letters from {1} to {2}!", lcLtrs.Count(), (int)'a', (int)'z');
-            foreach (char c1 in lcLtrs)
-                foreach (char c2 in lcLtrs)
-                    foreach (char c3 in lcLtrs)
+            IEnumerable<int> lcLtrs = Enumerable.Range((int)'a', 26);
+            foreach (int c1 in lcLtrs)
+                foreach (int c2 in lcLtrs)
+                    foreach (int c3 in lcLtrs)
                         yield return new int[] { c1, c2, c3 };
         }
 
-        private bool isPossiblePw(int[] pw, IEnumerable<int> inputData)
+        private bool isPossiblePw(int[] pw, IEnumerable<int> inputData, out int nspaces)
         {
+            nspaces = 0;
             int i = 0;
             int x2;
             foreach (int x1 in inputData)
@@ -81,6 +90,8 @@ namespace Problems50to59
                 x2 = x1 ^ pw[i];
                 if (x2 < 32 || x2 > 126)
                     return false;   // not a printable char
+                if (x2 == 32)
+                    nspaces++;      // count the spaces
                 i = (i + 1) % 3;
             }
             return true;
@@ -102,6 +113,7 @@ namespace Problems50to59
             }
             string spw = new string(pw.Select(x => (char)x).ToArray());
             Console.WriteLine("pw: {0} / output: {1}", spw, sb.ToString());
+            //sumChars = sb.ToString().Sum(c => (int)c);
             return sumChars;
         }
 
