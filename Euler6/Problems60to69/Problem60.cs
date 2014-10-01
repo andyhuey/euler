@@ -1,6 +1,7 @@
 ﻿/*
  * https://projecteuler.net/problem=60
  * Prime Pair Sets
+ * 13, 5197, 5701, 6733, 8389 -> 26033
  */
 using System;
 using System.Collections.Generic;
@@ -14,35 +15,55 @@ namespace Problems60to69
     class Problem60
     {
         bool[] primes;
-        const int nPrimeMax = 1000000;
-        const int nMax = 1000;
+        const int nMax = 9999;
+        const int nPrimeMax = nMax * nMax;
 
         public long soln1()
         {
             var sw = Stopwatch.StartNew();
 
             getPrimes();
+            Console.WriteLine("Got primes...");
 
             IEnumerable<int> lstPrimes = Enumerable.Range(2, nMax).Where(x => primes[x]);
 
             //Console.WriteLine(isPrimePairSet(new int[] { 3, 7, 109, 673 }));
-            int minSum = nMax * 4;
+            int minSum = nMax * 5;
 
             foreach (int n1 in lstPrimes)
+            {
                 foreach (int n2 in lstPrimes.Where(x => x > n1))
+                {
+                    int[] currSet2 = new int[] { n1, n2 };
+                    if (!isPrimePairSet(currSet2))
+                        continue;
                     foreach (int n3 in lstPrimes.Where(x => x > n2))
+                    {
+                        int[] currSet3 = new int[] { n1, n2, n3 };
+                        if (!isPrimePairSet(currSet3))
+                            continue;
                         foreach (int n4 in lstPrimes.Where(x => x > n3))
                         {
+                            int[] currSet4 = new int[] { n1, n2, n3, n4 };
+                            if (!isPrimePairSet(currSet4))
+                                continue;
                             //Console.WriteLine("{0}, {1}, {2}, {3}", n1, n2, n3, n4);
-                            int[] currSet = new int[] { n1, n2, n3, n4 };
-                            if (isPrimePairSet(currSet))
+                            foreach (int n5 in lstPrimes.Where(x => x > n4))
                             {
-                                int currSum = n1 + n2 + n3 + n4;
-                                Console.WriteLine("{0}, {1}, {2}, {3} -> {4}", n1, n2, n3, n4, currSum);
-                                if (minSum > currSum)
-                                    minSum = currSum;
+                                //Console.WriteLine("{0}, {1}, {2}, {3}, {4}", n1, n2, n3, n4, n5);
+                                int[] currSet = new int[] { n1, n2, n3, n4, n5 };
+                                if (isPrimePairSet(currSet))
+                                {
+                                    int currSum = n1 + n2 + n3 + n4 + n5;
+                                    Console.WriteLine("{0}, {1}, {2}, {3}, {4} -> {5}", n1, n2, n3, n4, n5, currSum);
+                                    if (minSum > currSum)
+                                        minSum = currSum;
+                                }
                             }
                         }
+                    }
+                }
+            }
 
             sw.Stop();
             Console.WriteLine("elapsed: {0} ms", sw.Elapsed.TotalMilliseconds);
