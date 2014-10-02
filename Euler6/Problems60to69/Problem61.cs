@@ -118,9 +118,77 @@ namespace Problems60to69
             //}
 
             // not sure where to do with this...
-            //var candidates = from x in myFigNums where x.getIsFig(FigEnum.Triangle) select x.Num;
-            //candidates = 
-            //    from x in myFigNums where !candidates.Contains(x.Num)
+            //Stack<FigurateNum> candidates = new Stack<FigurateNum>();
+            var q1 = from x in myFigNums where x.getIsFig(FigEnum.Triangle) select x;
+            foreach (var c1 in q1)
+            {
+                var q2 = 
+                    from x in myFigNums 
+                    where x.getFirstTwoDigits() == c1.getLastTwoDigits() 
+                    && x.Num != c1.Num
+                    select x;
+                foreach (var c2 in q2)
+                {
+                    var q3 =
+                        from x in myFigNums
+                        where x.getFirstTwoDigits() == c2.getLastTwoDigits()
+                        && x.Num != c1.Num
+                        && x.Num != c2.Num
+                        select x;
+                    foreach (var c3 in q3)
+                    {
+                        var q4 =
+                            from x in myFigNums
+                            where x.getFirstTwoDigits() == c3.getLastTwoDigits()
+                            && x.Num != c1.Num
+                            && x.Num != c2.Num
+                            && x.Num != c3.Num
+                            select x;
+                        foreach (var c4 in q4)
+                        {
+                            var q5 =
+                                from x in myFigNums
+                                where x.getFirstTwoDigits() == c4.getLastTwoDigits()
+                                && x.Num != c1.Num
+                                && x.Num != c2.Num
+                                && x.Num != c3.Num
+                                && x.Num != c4.Num
+                                select x;
+                            foreach (var c5 in q5)
+                            {
+                                var q6 =
+                                    from x in myFigNums
+                                    where x.getFirstTwoDigits() == c5.getLastTwoDigits()
+                                    && x.Num != c1.Num
+                                    && x.Num != c2.Num
+                                    && x.Num != c3.Num
+                                    && x.Num != c4.Num
+                                    && x.Num != c5.Num
+                                    select x;
+                                foreach (var c6 in q6)
+                                {
+                                    //Console.WriteLine("{0} {1} {2} {3} {4} {5}", c1.Num, c2.Num, c3.Num, c4.Num, c5.Num, c6.Num);
+                                    bool gotIt = true;
+                                    HashSet<FigurateNum> candidateSet = new HashSet<FigurateNum>();
+                                    candidateSet.Add(c1);
+                                    candidateSet.Add(c2);
+                                    candidateSet.Add(c3);
+                                    candidateSet.Add(c4);
+                                    candidateSet.Add(c5);
+                                    candidateSet.Add(c6);
+                                    foreach (FigEnum k in Enum.GetValues(typeof(FigEnum)))
+                                    {
+                                        if (!candidateSet.Any(c => c.getIsFig(k)))
+                                            gotIt = false;
+                                    }
+                                    if (gotIt)
+                                        Console.WriteLine("{0} {1} {2} {3} {4} {5}", c1.Num, c2.Num, c3.Num, c4.Num, c5.Num, c6.Num);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
 
 
             sw.Stop();
