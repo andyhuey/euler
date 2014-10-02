@@ -14,20 +14,64 @@ namespace Problems60to69
 {
     class Problem61
     {
-        struct FigurateNum
+        enum FigEnum
         {
-            public int num { get; private set; }
-            public bool isTriangleNum { get; set; }
-            public bool isSquareNum { get; set; }
-            public bool isPentagonNum { get; set; }
-            public bool isHexagonNum { get; set; }
-            public bool isHeptagonNum { get; set; }
-            public bool isOctagonNum { get; set; }
+            Triangle = 3,
+            Square = 4,
+            Pentagon = 5,
+            Hexagon = 6,
+            Heptagon = 7,
+            Octagon = 8
+        }
+
+        class FigurateNum
+        {
+            public int Num { get; private set; }
+
+            private Dictionary<FigEnum, bool> isFig;
 
             public FigurateNum(int n)
-                : this()
             {
-                this.num = n;
+                this.Num = n;
+                isFig = new Dictionary<FigEnum, bool>();
+            }
+
+            public bool getIsFig(FigEnum k)
+            {
+                if (isFig.ContainsKey(k))
+                    return isFig[k];
+                else
+                    return false;
+            }
+
+            public void setIsFig(FigEnum k, bool b)
+            {
+                isFig[k] = b;
+            }
+
+            public string getFirstTwoDigits()
+            {
+                int n = this.Num / 100;
+                return n.ToString();
+            }
+
+            public string getLastTwoDigits()
+            {
+                int n = this.Num % 100;
+                return n.ToString("D2");
+            }
+
+            public override string ToString()
+            {
+                //return base.ToString();
+                StringBuilder sb = new StringBuilder();
+                sb.AppendFormat("{0}: ", this.Num);
+                foreach (FigEnum k in Enum.GetValues(typeof(FigEnum)))
+                {
+                    if (isFig.ContainsKey(k))
+                        sb.AppendFormat("{0}: {1} / ", k, isFig[k]);
+                }
+                return sb.ToString();
             }
         }
 
@@ -35,10 +79,74 @@ namespace Problems60to69
         {
             var sw = Stopwatch.StartNew();
 
+            // we want to start by making a list of all the 4-digit fig #s.
+            List<FigurateNum> myFigNums = new List<FigurateNum>();
+
+            foreach (FigEnum k in Enum.GetValues(typeof(FigEnum)))
+            {
+                int n = 1;
+                // skip to 1001.
+                while (getFigurateNum(k, ++n) < 1000) ;
+                // now start saving them.
+                int p = getFigurateNum(k, n);
+                //Console.WriteLine("{0}, {1} -> {2}", k, n, p);
+                while (p < 10000)
+                {
+                    var fn = myFigNums.FirstOrDefault(x => x.Num == p);
+                    if (fn == null)
+                    {
+                        fn = new FigurateNum(p);
+                        myFigNums.Add(fn);
+                    }
+                    fn.setIsFig(k, true);
+
+                    n++;
+                    p = getFigurateNum(k, n);
+                }
+                //Console.WriteLine("{0}, {1} -> {2}", k, n, p);
+            }
+
+            //foreach (var fn in myFigNums)
+            //{
+            //    //Console.WriteLine(fn.ToString());
+            //    Console.WriteLine("{0} {1} - {2}", fn.getFirstTwoDigits(), fn.getLastTwoDigits(), fn.ToString());
+            //}
+
+            //foreach (FigEnum k in Enum.GetValues(typeof(FigEnum)))
+            //{
+            //    Console.WriteLine("{0}: {1} numbers", k, myFigNums.Where(x => x.getIsFig(k)).Count());
+            //}
+
+            // not sure where to do with this...
+            //var candidates = from x in myFigNums where x.getIsFig(FigEnum.Triangle) select x.Num;
+            //candidates = 
+            //    from x in myFigNums where !candidates.Contains(x.Num)
+
 
             sw.Stop();
             Console.WriteLine("elapsed: {0} ms", sw.Elapsed.TotalMilliseconds);
             return 0;
+        }
+
+        private int getFigurateNum(FigEnum k, int n)
+        {
+            switch (k)
+            {
+                case FigEnum.Triangle:
+                    return n * (n + 1) / 2;
+                case FigEnum.Square:
+                    return n * n;
+                case FigEnum.Pentagon:
+                    return n * (3 * n - 1) / 2;
+                case FigEnum.Hexagon:
+                    return n * (2 * n - 1);
+                case FigEnum.Heptagon:
+                    return n * (5 * n - 3) / 2;
+                case FigEnum.Octagon:
+                    return n * (3 * n - 2);
+                default:
+                    throw new ArgumentOutOfRangeException("k", "k must be a valid FigEnum.");
+            }
         }
 
         private long triangleNum(int n)
