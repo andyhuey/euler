@@ -79,7 +79,6 @@ namespace Problems60to69
 
             public override string ToString()
             {
-                //return base.ToString();
                 StringBuilder sb = new StringBuilder();
                 sb.AppendFormat("{0}: ", this.Num);
                 foreach (FigEnum k in Enum.GetValues(typeof(FigEnum)))
@@ -91,14 +90,34 @@ namespace Problems60to69
             }
         }
 
+        List<FigurateNum> myFigNums;
+
         public long soln1()
         {
-            long sumOfNums = 0;
             var sw = Stopwatch.StartNew();
+            long sumOfNums = 0;
 
             // we want to start by making a list of all the 4-digit fig #s.
-            List<FigurateNum> myFigNums = new List<FigurateNum>();
+            myFigNums = new List<FigurateNum>();
+            this.popFigNums();
 
+            var q1 = from x in myFigNums where x.getHighestFig() == FigEnum.Triangle select x;
+            foreach (var c1 in q1)
+            {
+                List<FigurateNum> candidateSet = new List<FigurateNum>();
+                candidateSet.Add(c1);
+                long n = processSubset(candidateSet);
+                if (n > 0)
+                    sumOfNums = n;
+            }
+
+            sw.Stop();
+            Console.WriteLine("elapsed: {0} ms", sw.Elapsed.TotalMilliseconds);
+            return sumOfNums;
+        }
+
+        private void popFigNums()
+        {
             foreach (FigEnum k in Enum.GetValues(typeof(FigEnum)))
             {
                 int n = 1;
@@ -120,102 +139,55 @@ namespace Problems60to69
                     n++;
                     p = getFigurateNum(k, n);
                 }
-                //Console.WriteLine("{0}, {1} -> {2}", k, n, p);
             }
+        }
 
-            //foreach (var fn in myFigNums)
-            //{
-            //    //Console.WriteLine(fn.ToString());
-            //    Console.WriteLine("{0} {1} - {2}", fn.getFirstTwoDigits(), fn.getLastTwoDigits(), fn.ToString());
-            //}
-
-            //foreach (FigEnum k in Enum.GetValues(typeof(FigEnum)))
-            //{
-            //    Console.WriteLine("{0}: {1} numbers", k, myFigNums.Where(x => x.getIsFig(k)).Count());
-            //}
-
-            var q1 = from x in myFigNums where x.getHighestFig() == FigEnum.Triangle select x;
-            foreach (var c1 in q1)
+        private long processSubset(List<FigurateNum> candidateSet)
+        {
+            if (candidateSet.Count < 6)
             {
+                long rv = 0;
+                FigurateNum c1 = candidateSet.Last();
                 var q2 = 
                     from x in myFigNums 
                     where x.getFirstTwoDigits() == c1.getLastTwoDigits() 
-                    && x.Num != c1.Num
+                    && !candidateSet.Any(c => c.Num == x.Num)
                     select x;
                 foreach (var c2 in q2)
                 {
-                    var q3 =
-                        from x in myFigNums
-                        where x.getFirstTwoDigits() == c2.getLastTwoDigits()
-                        && x.Num != c1.Num
-                        && x.Num != c2.Num
-                        select x;
-                    foreach (var c3 in q3)
-                    {
-                        var q4 =
-                            from x in myFigNums
-                            where x.getFirstTwoDigits() == c3.getLastTwoDigits()
-                            && x.Num != c1.Num
-                            && x.Num != c2.Num
-                            && x.Num != c3.Num
-                            select x;
-                        foreach (var c4 in q4)
-                        {
-                            var q5 =
-                                from x in myFigNums
-                                where x.getFirstTwoDigits() == c4.getLastTwoDigits()
-                                && x.Num != c1.Num
-                                && x.Num != c2.Num
-                                && x.Num != c3.Num
-                                && x.Num != c4.Num
-                                select x;
-                            foreach (var c5 in q5)
-                            {
-                                var q6 =
-                                    from x in myFigNums
-                                    where x.getFirstTwoDigits() == c5.getLastTwoDigits()
-                                    && x.getLastTwoDigits() == c1.getFirstTwoDigits()       // wrap!
-                                    && x.Num != c1.Num
-                                    && x.Num != c2.Num
-                                    && x.Num != c3.Num
-                                    && x.Num != c4.Num
-                                    && x.Num != c5.Num
-                                    select x;
-                                foreach (var c6 in q6)
-                                {
-                                    bool gotIt = true;
-                                    
-                                    HashSet<FigurateNum> candidateSet = new HashSet<FigurateNum>();
-                                    candidateSet.Add(c1);
-                                    candidateSet.Add(c2);
-                                    candidateSet.Add(c3);
-                                    candidateSet.Add(c4);
-                                    candidateSet.Add(c5);
-                                    candidateSet.Add(c6);
-
-                                    foreach (FigEnum k in Enum.GetValues(typeof(FigEnum)))
-                                    {
-                                        if (!candidateSet.Any(c => c.getHighestFig() == k))
-                                            gotIt = false;
-                                    }
-
-                                    if (gotIt)
-                                    {
-                                        foreach (var c in candidateSet)
-                                            Console.WriteLine(c);
-                                        Console.WriteLine("-----");
-                                        sumOfNums = candidateSet.Sum(c => c.Num);
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    List<FigurateNum> nextCandidateSet = new List<FigurateNum>(candidateSet);
+                    nextCandidateSet.Add(c2);
+                    long n = processSubset(nextCandidateSet);
+                    if (n > 0)
+                        rv = n;
                 }
+                return rv;
             }
+            else
+            {
+                // we have all 6 numbers. check and see if we've got what we need...
+                // check wrap from #6 to #1...
+                FigurateNum c1 = candidateSet.First();
+                FigurateNum c6 = candidateSet.Last();
+                if (c6.getLastTwoDigits() != c1.getFirstTwoDigits())
+                    return 0;
+                // do we have one of each?
+                bool gotIt = true;
+                foreach (FigEnum k in Enum.GetValues(typeof(FigEnum)))
+                {
+                    if (!candidateSet.Any(c => c.getHighestFig() == k))
+                        gotIt = false;
+                }
 
-            sw.Stop();
-            Console.WriteLine("elapsed: {0} ms", sw.Elapsed.TotalMilliseconds);
-            return sumOfNums;
+                if (gotIt)
+                {
+                    foreach (var c in candidateSet)
+                        Console.WriteLine(c);
+                    Console.WriteLine("-----");
+                    return candidateSet.Sum(c => c.Num);
+                }
+                return 0;   // nope.
+            }
         }
 
         private int getFigurateNum(FigEnum k, int n)
