@@ -2,6 +2,14 @@
  * https://projecteuler.net/problem=61
  * Cyclical figurate numbers
  * (see also problem 45)
+ * 
+ * 8256: Triangle: True /
+ * 5625: Square: True /
+ * 2512: Heptagon: True /
+ * 1281: Octagon: True /
+ * 8128: Triangle: True / Hexagon: True /
+ * 2882: Pentagon: True /
+ * The answer is 28684
  */
 using System;
 using System.Collections.Generic;
@@ -49,6 +57,14 @@ namespace Problems60to69
                 isFig[k] = b;
             }
 
+            public FigEnum? getHighestFig()
+            {
+                var q = from k in isFig where k.Value == true orderby k.Key descending select k.Key;
+                if (!q.Any())
+                    return null;
+                return q.First();
+            }
+
             public string getFirstTwoDigits()
             {
                 int n = this.Num / 100;
@@ -77,6 +93,7 @@ namespace Problems60to69
 
         public long soln1()
         {
+            long sumOfNums = 0;
             var sw = Stopwatch.StartNew();
 
             // we want to start by making a list of all the 4-digit fig #s.
@@ -119,12 +136,13 @@ namespace Problems60to69
 
             // not sure where to do with this...
             //Stack<FigurateNum> candidates = new Stack<FigurateNum>();
-            var q1 = from x in myFigNums where x.getIsFig(FigEnum.Triangle) select x;
+            var q1 = from x in myFigNums where x.getHighestFig() == FigEnum.Triangle select x;
             foreach (var c1 in q1)
             {
                 var q2 = 
                     from x in myFigNums 
                     where x.getFirstTwoDigits() == c1.getLastTwoDigits() 
+                    //&& x.getIsFig(FigEnum.Square)
                     && x.Num != c1.Num
                     select x;
                 foreach (var c2 in q2)
@@ -132,6 +150,7 @@ namespace Problems60to69
                     var q3 =
                         from x in myFigNums
                         where x.getFirstTwoDigits() == c2.getLastTwoDigits()
+                        //&& x.getIsFig(FigEnum.Pentagon)
                         && x.Num != c1.Num
                         && x.Num != c2.Num
                         select x;
@@ -140,6 +159,7 @@ namespace Problems60to69
                         var q4 =
                             from x in myFigNums
                             where x.getFirstTwoDigits() == c3.getLastTwoDigits()
+                            //&& x.getIsFig(FigEnum.Hexagon)
                             && x.Num != c1.Num
                             && x.Num != c2.Num
                             && x.Num != c3.Num
@@ -149,6 +169,7 @@ namespace Problems60to69
                             var q5 =
                                 from x in myFigNums
                                 where x.getFirstTwoDigits() == c4.getLastTwoDigits()
+                                //&& x.getIsFig(FigEnum.Heptagon)
                                 && x.Num != c1.Num
                                 && x.Num != c2.Num
                                 && x.Num != c3.Num
@@ -159,6 +180,8 @@ namespace Problems60to69
                                 var q6 =
                                     from x in myFigNums
                                     where x.getFirstTwoDigits() == c5.getLastTwoDigits()
+                                    && x.getLastTwoDigits() == c1.getFirstTwoDigits()       // wrap!
+                                    //&& x.getIsFig(FigEnum.Octagon)
                                     && x.Num != c1.Num
                                     && x.Num != c2.Num
                                     && x.Num != c3.Num
@@ -167,8 +190,8 @@ namespace Problems60to69
                                     select x;
                                 foreach (var c6 in q6)
                                 {
-                                    //Console.WriteLine("{0} {1} {2} {3} {4} {5}", c1.Num, c2.Num, c3.Num, c4.Num, c5.Num, c6.Num);
                                     bool gotIt = true;
+                                    //Console.WriteLine("{0} {1} {2} {3} {4} {5}", c1.Num, c2.Num, c3.Num, c4.Num, c5.Num, c6.Num);
                                     HashSet<FigurateNum> candidateSet = new HashSet<FigurateNum>();
                                     candidateSet.Add(c1);
                                     candidateSet.Add(c2);
@@ -176,13 +199,20 @@ namespace Problems60to69
                                     candidateSet.Add(c4);
                                     candidateSet.Add(c5);
                                     candidateSet.Add(c6);
+
                                     foreach (FigEnum k in Enum.GetValues(typeof(FigEnum)))
                                     {
-                                        if (!candidateSet.Any(c => c.getIsFig(k)))
+                                        if (!candidateSet.Any(c => c.getHighestFig() == k))
                                             gotIt = false;
                                     }
+
                                     if (gotIt)
-                                        Console.WriteLine("{0} {1} {2} {3} {4} {5}", c1.Num, c2.Num, c3.Num, c4.Num, c5.Num, c6.Num);
+                                    {
+                                        foreach (var c in candidateSet)
+                                            Console.WriteLine(c);
+                                        Console.WriteLine("-----");
+                                        sumOfNums = candidateSet.Sum(c => c.Num);
+                                    }
                                 }
                             }
                         }
@@ -193,7 +223,7 @@ namespace Problems60to69
 
             sw.Stop();
             Console.WriteLine("elapsed: {0} ms", sw.Elapsed.TotalMilliseconds);
-            return 0;
+            return sumOfNums;
         }
 
         private int getFigurateNum(FigEnum k, int n)
