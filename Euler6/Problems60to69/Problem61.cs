@@ -134,15 +134,12 @@ namespace Problems60to69
             //    Console.WriteLine("{0}: {1} numbers", k, myFigNums.Where(x => x.getIsFig(k)).Count());
             //}
 
-            // not sure where to do with this...
-            //Stack<FigurateNum> candidates = new Stack<FigurateNum>();
             var q1 = from x in myFigNums where x.getHighestFig() == FigEnum.Triangle select x;
             foreach (var c1 in q1)
             {
                 var q2 = 
                     from x in myFigNums 
                     where x.getFirstTwoDigits() == c1.getLastTwoDigits() 
-                    //&& x.getIsFig(FigEnum.Square)
                     && x.Num != c1.Num
                     select x;
                 foreach (var c2 in q2)
@@ -150,7 +147,6 @@ namespace Problems60to69
                     var q3 =
                         from x in myFigNums
                         where x.getFirstTwoDigits() == c2.getLastTwoDigits()
-                        //&& x.getIsFig(FigEnum.Pentagon)
                         && x.Num != c1.Num
                         && x.Num != c2.Num
                         select x;
@@ -159,7 +155,6 @@ namespace Problems60to69
                         var q4 =
                             from x in myFigNums
                             where x.getFirstTwoDigits() == c3.getLastTwoDigits()
-                            //&& x.getIsFig(FigEnum.Hexagon)
                             && x.Num != c1.Num
                             && x.Num != c2.Num
                             && x.Num != c3.Num
@@ -169,7 +164,6 @@ namespace Problems60to69
                             var q5 =
                                 from x in myFigNums
                                 where x.getFirstTwoDigits() == c4.getLastTwoDigits()
-                                //&& x.getIsFig(FigEnum.Heptagon)
                                 && x.Num != c1.Num
                                 && x.Num != c2.Num
                                 && x.Num != c3.Num
@@ -181,7 +175,6 @@ namespace Problems60to69
                                     from x in myFigNums
                                     where x.getFirstTwoDigits() == c5.getLastTwoDigits()
                                     && x.getLastTwoDigits() == c1.getFirstTwoDigits()       // wrap!
-                                    //&& x.getIsFig(FigEnum.Octagon)
                                     && x.Num != c1.Num
                                     && x.Num != c2.Num
                                     && x.Num != c3.Num
@@ -191,7 +184,7 @@ namespace Problems60to69
                                 foreach (var c6 in q6)
                                 {
                                     bool gotIt = true;
-                                    //Console.WriteLine("{0} {1} {2} {3} {4} {5}", c1.Num, c2.Num, c3.Num, c4.Num, c5.Num, c6.Num);
+                                    
                                     HashSet<FigurateNum> candidateSet = new HashSet<FigurateNum>();
                                     candidateSet.Add(c1);
                                     candidateSet.Add(c2);
@@ -220,7 +213,6 @@ namespace Problems60to69
                 }
             }
 
-
             sw.Stop();
             Console.WriteLine("elapsed: {0} ms", sw.Elapsed.TotalMilliseconds);
             return sumOfNums;
@@ -247,61 +239,5 @@ namespace Problems60to69
             }
         }
 
-        private long triangleNum(int n)
-        {
-            return n * (n + 1) / 2;
-        }
-
-        private bool isTriangleNum(int x)
-        {
-            // from http://www.mathblog.dk/project-euler-42-triangle-words/
-            double dn = (Math.Sqrt(8 * x + 1) - 1) / 2;
-            return dn == (int)dn;
-        }
-
-        private long squareNum(int n)
-        {
-            return n * n;
-        }
-
-        private bool isSquareNum(long n)
-        {
-            double dn = Math.Sqrt(n);
-            return dn == (int)dn;
-        }
-
-        private long pentagonNum(int n)
-        {
-            return n * (3 * n - 1) / 2;
-        }
-
-        private bool isPentagonNum(long x)
-        {
-            // from http://www.mathblog.dk/project-euler-44-smallest-pair-pentagonal-numbers/
-            double dn = (Math.Sqrt(24 * x + 1) + 1) / 6;
-            return dn == (int)dn;
-        }
-
-        private long hexagonNum(int n)
-        {
-            return n * (2 * n - 1);
-        }
-
-        private bool isHexagonNum(long x)
-        {
-            // from http://en.wikipedia.org/wiki/Hexagonal_number
-            double dn = (Math.Sqrt(8 * x + 1) + 1) / 4;
-            return dn == (int)dn;
-        }
-
-        private long heptagonNum(int n)
-        {
-            return n * (5 * n - 3) / 2;
-        }
-
-        private long octagonNum(int n)
-        {
-            return n * (3 * n - 2);
-        }
     }
 }
