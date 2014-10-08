@@ -15,20 +15,17 @@ namespace Problems60to69
 {
     class Problem62
     {
-        Dictionary<int, long> cubes;
-
         public long soln1()
         {
             var sw = Stopwatch.StartNew();
-            
-            cubes = new Dictionary<int, long>();
-            cubes.Add(1, 1);    // 1^3 -> 1
-            cubes.Add(2, 2 * 2 * 2);
 
-            //Console.WriteLine(is_cube(27));
+            //Console.WriteLine(is_cube(3 * 3 * 3));
+            //Console.WriteLine(is_cube(12 * 12 * 12));
+            //Console.WriteLine(is_cube(7 * 7 * 7));
             //Console.WriteLine(is_cube(60));
-
-            var my_perms = this.get_permutations("", "41063625");
+            //return 0;
+            
+            var my_perms = this.get_permutations("41063625");
             foreach (var s in my_perms)
             {
                 long l = Convert.ToInt64(s);
@@ -42,7 +39,13 @@ namespace Problems60to69
             return 0;
         }
 
-        private IEnumerable<string> get_permutations(string so_far, string remains)
+        private IEnumerable<string> get_permutations(string s)
+        {
+            // get all distinct permutations.
+            return this.get_perms("", s).Distinct();
+        }
+        
+        private IEnumerable<string> get_perms(string so_far, string remains)
         {
             // this should return all the permutations of a string, without worrying about uniqueness.
             if (remains == "")
@@ -51,21 +54,15 @@ namespace Problems60to69
             {
                 char ch = remains[i];
                 string new_remains = remains.Remove(i, 1);
-                foreach (string s in get_permutations(so_far + ch, new_remains))
+                foreach (string s in get_perms(so_far + ch, new_remains))
                     yield return s;
             }
         }
 
         private bool is_cube(long n)
         {
-            //double cr = Math.Pow(n, 1.0 / 3.0);
-            //return cr == (int)cr;
-            if (cubes.Where((k, v) => v == n).Any())
-                return true;
-            if (n < cubes.Select((k,v) => v).Max())
-                return false;
-            int k1 = cubes.Select((k,v) => k).Max());
-
+            double cr = Math.Round(Math.Pow(n, 1.0 / 3.0), 4);
+            return cr == (int)cr;
         }
     }
 }
