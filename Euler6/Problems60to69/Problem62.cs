@@ -1,8 +1,9 @@
 ﻿/*
  * https://projecteuler.net/problem=62
  * Cubic permutations
- * Find the smallest cube for which exactly five permutations of its digits are cube.
- * 404: 65939264,65939246,69934526,69426539,26463599 - nope.
+ * Find the largest cube for which exactly five permutations of its digits are cube.
+ * 127035954683,352045367981,373559126408,569310543872,589323567104
+ * The answer is 127,035,954,683 or 127035954683
  */
 using System;
 using System.Collections.Generic;
@@ -16,32 +17,44 @@ namespace Problems60to69
 {
     class Problem62
     {
+        // key is the largest perm (not necessarily a cube itself). 
+        // value is a list of all perms that are cubes.
+        Dictionary<long, List<long>> myCubePerms;
+
         public long soln1()
         {
             long rv = 0;
             var sw = Stopwatch.StartNew();
 
-            // this is somewhat brain-dead, but let's just step through cubes, and see if we hit the right one...
+            myCubePerms = new Dictionary<long, List<long>>();
+
+            // step through cubes & build up our list until we get an entry with 5 cubes.
             long n = 300;
             long n_cube = n * n * n;
-            while (n_cube < Int32.MaxValue)
+            while (n_cube < Int64.MaxValue)
             {
-                var my_perms = this.get_permutations(n_cube.ToString())
-                    .Where(x => Int64.Parse(x) >= n_cube);
-                var cubes = my_perms.Where(x => is_cube(Int64.Parse(x)));
-                if (cubes.Count() >= 3)
+                long largest_perm = Convert.ToInt64(get_largest_perm(n_cube.ToString()));
+                if (myCubePerms.ContainsKey(largest_perm))
                 {
-                    Console.WriteLine("{0}: {1}", n, string.Join(",", cubes));
+                    var myPermList = myCubePerms[largest_perm];
+                    myPermList.Add(n_cube);
+                    if (myPermList.Count() == 5)
+                    {
+                        Console.WriteLine(string.Join(",", myPermList));
+                        rv = myPermList.Min();
+                        break;
+                    }
                 }
-                if (cubes.Count() == 5)
+                else
                 {
-                    rv = n_cube;
-                    break;
+                    myCubePerms.Add(largest_perm, new List<long>() { n_cube });
                 }
+
+                // next.
                 n++;
                 n_cube = n * n * n;
                 if (n % 100 == 0)
-                    Console.WriteLine("[at n={0}]", n);
+                    Console.WriteLine("[at n={0}, n^3={1:n0}]", n, n_cube);
             }
 
             sw.Stop();
@@ -49,30 +62,13 @@ namespace Problems60to69
             return rv;
         }
 
-        private IEnumerable<string> get_permutations(string s)
+        private string get_largest_perm(string s)
         {
-            // get all distinct permutations.
-            return this.get_perms("", s).Distinct();
-        }
-        
-        private IEnumerable<string> get_perms(string so_far, string remains)
-        {
-            // this should return all the permutations of a string, without worrying about uniqueness.
-            if (remains == "")
-                yield return so_far;
-            for (int i = 0; i < remains.Length; i++)
-            {
-                char ch = remains[i];
-                string new_remains = remains.Remove(i, 1);
-                foreach (string s in get_perms(so_far + ch, new_remains))
-                    yield return s;
-            }
+            var ca = s.ToCharArray();
+            Array.Sort(ca);
+            Array.Reverse(ca);
+            return new string(ca);
         }
 
-        private bool is_cube(long n)
-        {
-            double cr = Math.Round(Math.Pow(n, 1.0 / 3.0), 8);
-            return cr == (int)cr;
-        }
     }
 }
