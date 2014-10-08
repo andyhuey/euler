@@ -2,6 +2,7 @@
  * https://projecteuler.net/problem=62
  * Cubic permutations
  * Find the smallest cube for which exactly five permutations of its digits are cube.
+ * 404: 65939264,65939246,69934526,69426539,26463599 - nope.
  */
 using System;
 using System.Collections.Generic;
@@ -17,26 +18,35 @@ namespace Problems60to69
     {
         public long soln1()
         {
+            long rv = 0;
             var sw = Stopwatch.StartNew();
 
-            //Console.WriteLine(is_cube(3 * 3 * 3));
-            //Console.WriteLine(is_cube(12 * 12 * 12));
-            //Console.WriteLine(is_cube(7 * 7 * 7));
-            //Console.WriteLine(is_cube(60));
-            //return 0;
-            
-            var my_perms = this.get_permutations("41063625");
-            foreach (var s in my_perms)
+            // this is somewhat brain-dead, but let's just step through cubes, and see if we hit the right one...
+            long n = 300;
+            long n_cube = n * n * n;
+            while (n_cube < Int32.MaxValue)
             {
-                long l = Convert.ToInt64(s);
-                if (is_cube(l))
-                    Console.WriteLine(s);
+                var my_perms = this.get_permutations(n_cube.ToString())
+                    .Where(x => Int64.Parse(x) >= n_cube);
+                var cubes = my_perms.Where(x => is_cube(Int64.Parse(x)));
+                if (cubes.Count() >= 3)
+                {
+                    Console.WriteLine("{0}: {1}", n, string.Join(",", cubes));
+                }
+                if (cubes.Count() == 5)
+                {
+                    rv = n_cube;
+                    break;
+                }
+                n++;
+                n_cube = n * n * n;
+                if (n % 100 == 0)
+                    Console.WriteLine("[at n={0}]", n);
             }
-            //Console.WriteLine("# of perms: {0}", my_perms.Count());
 
             sw.Stop();
             Console.WriteLine("elapsed: {0} ms", sw.Elapsed.TotalMilliseconds);
-            return 0;
+            return rv;
         }
 
         private IEnumerable<string> get_permutations(string s)
@@ -61,7 +71,7 @@ namespace Problems60to69
 
         private bool is_cube(long n)
         {
-            double cr = Math.Round(Math.Pow(n, 1.0 / 3.0), 4);
+            double cr = Math.Round(Math.Pow(n, 1.0 / 3.0), 8);
             return cr == (int)cr;
         }
     }
