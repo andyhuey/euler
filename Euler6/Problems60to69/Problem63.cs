@@ -1,8 +1,8 @@
 ﻿/*
  * https://projecteuler.net/problem=63
  * Powerful digit counts
- * (The answer is not 50.)
- * need more precision, I think...
+ * The answer is 49.
+ * (Note that, even though I don't have the precision, the # of digits should be right.)
  */
 using System;
 using System.Collections.Generic;
@@ -20,8 +20,8 @@ namespace Problems60to69
             long rv = 0;
             var sw = Stopwatch.StartNew();
 
-            // just messing around.
-            for (int x = 0; x < 1000; x++)
+            // probably good enough.
+            for (int x = 1; x < 1000; x++)
             {
                 for (int y = 1; y < 100; y++)
                 {
