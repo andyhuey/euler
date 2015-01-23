@@ -18,6 +18,7 @@ namespace Problems60to69
         {
             var sw = Stopwatch.StartNew();
 
+            long max_x = (long)Math.Floor(Math.Sqrt(long.MaxValue));
             long x, D;
             long largest_min_x = 0;
             long D_for_largest_min_x = 0;
@@ -32,7 +33,7 @@ namespace Problems60to69
                 x = 2;
                 y2 = 0;
                 solnFound = false;
-                while (x < 9999 && !solnFound)
+                while (x < max_x && !solnFound)
                 {
                     // we need (x^2 - 1) / D to be a perfect square.
                     y2 = (double)((x * x) - 1) / D;
@@ -71,6 +72,10 @@ namespace Problems60to69
 
         private bool isPerfectSquare(double x)
         {
+            // is it already an int?
+            if (x % 1 != 0)
+                return false;
+            // yes.
             double sqrt = Math.Sqrt(x);
             return sqrt % 1 == 0;
         }
