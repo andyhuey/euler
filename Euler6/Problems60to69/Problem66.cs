@@ -179,5 +179,72 @@ namespace Problems60to69
             double sqrt = Math.Sqrt(x);
             return sqrt % 1 == 0;
         }
+
+        public long soln2()
+        {
+            // from Euler forums - Thu, 12 Feb 2015, 08:49 - sergii
+            // "Algorithm is described here: http://mathworld.wolfram.com/PellEquation.html"
+            const int D_MAX = 1000;
+            var sw = new Stopwatch();
+            sw.Start();
+
+            BigInteger x = 0;
+            var maxD = 0;
+            for (var d = 2; d <= D_MAX; d++)
+            {
+                var a = GetSquareRootFractionExpansion(d);
+                if (a.Count == 0)
+                {
+                    continue;
+                }
+
+                var r = a.Count - 2;
+                var n = r % 2 == 1 ? r : 2 * r + 1;
+
+                BigInteger p0 = a[0];
+                BigInteger p1 = a[0] * a[1] + 1;
+                for (var i = 2; i <= n; i++)
+                {
+                    var tmp = p1;
+                    p1 = a[((i - 1) % (r + 1)) + 1] * p1 + p0;
+                    p0 = tmp;
+                }
+
+                if (p1 > x)
+                {
+                    x = p1;
+                    maxD = d;
+                }
+            }
+
+            sw.Stop();
+            Console.WriteLine("elapsed: {0} ms", sw.Elapsed.TotalMilliseconds);
+            return maxD;
+        }
+        
+        private static IList<int> GetSquareRootFractionExpansion(int n)
+        {
+            var r = Math.Sqrt(n);
+            var m = 0;
+            var d = 1;
+            var a = (int)r;
+
+            if ((a * a) == n)
+            {
+                return new int[0];
+            }
+
+            var list = new List<int> { a };
+
+            while (a != 2 * list[0])
+            {
+                m = d * a - m;
+                d = (n - m * m) / d;
+                a = (int)(r + m) / d;
+                list.Add(a);
+            }
+
+            return list;
+        }
     }
 }
