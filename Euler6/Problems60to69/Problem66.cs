@@ -80,9 +80,6 @@ namespace Problems60to69
                 //    sb.AppendFormat("{0} ", d);
                 //Console.WriteLine(sb);
 
-                //for (int i = 0; i < 4; i++)
-                //    Console.WriteLine("seq[{0}] = {1}", i, getSeqValue(seq, i));
-
                 bool solnFound = false;
                 int n = 1;
                 BigInteger x = 0;
@@ -166,111 +163,12 @@ namespace Problems60to69
             return a;
         }
 
-        public long soln1_nope()
-        {
-            var sw = Stopwatch.StartNew();
-
-            long max_y = (long)Math.Floor(Math.Sqrt(long.MaxValue));
-            long y, D;
-            long largest_min_x = 1;
-            long D_for_largest_min_x = 0;
-            double x2;
-            bool solnFound;
-
-            for (D = 2; D <= 1000; D++)
-            {
-                if (isPerfectSquare(D))
-                    continue;
-                // find minimal solution for y.
-                y = 1;
-                x2 = 0;
-                solnFound = false;
-                while (y < max_y && !solnFound)
-                {
-                    // we need (1 + Dy^2) to be a perfect square.
-                    x2 = 1 + D * y * y;
-                    if (isPerfectSquare(x2))
-                        solnFound = true;
-                    else
-                        y++;
-                }
-                if (!solnFound)
-                {
-                    Console.WriteLine("Solution not found for D={0}.", D);
-                    Console.ReadLine();
-                }
-                else
-                {
-                    int x = (int)Math.Sqrt(x2);
-                    if (x > largest_min_x)
-                    {
-                        largest_min_x = x;
-                        D_for_largest_min_x = D;
-                        Console.WriteLine("For D={0}, min x={1:n0}, y={2:n0}.", D, x, y);
-                    }
-                }
-            }
-
-            sw.Stop();
-            Console.WriteLine("elapsed: {0} ms", sw.Elapsed.TotalMilliseconds);
-            return D_for_largest_min_x;
-        }
-
-        public long soln1_old()
-        {
-            var sw = Stopwatch.StartNew();
-
-            long max_x = (long)Math.Floor(Math.Sqrt(long.MaxValue));
-            long x, D;
-            long largest_min_x = 0;
-            long D_for_largest_min_x = 0;
-            double y2;
-            bool solnFound;
-
-            for (D = 2; D <= 1000; D++)
-            {
-                if (isPerfectSquare(D))
-                    continue;
-                // find minimal solution for x.
-                x = 2;
-                y2 = 0;
-                solnFound = false;
-                while (x < max_x && !solnFound)
-                {
-                    // we need (x^2 - 1) / D to be a perfect square.
-                    y2 = (double)((x * x) - 1) / D;
-                    if (isPerfectSquare(y2))
-                        solnFound = true;
-                    else
-                        x++;
-                }
-                if (!solnFound)
-                {
-                    Console.WriteLine("Solution not found for D={0}.", D);
-                    Console.ReadLine();
-                }
-                else
-                {
-                    if (x > largest_min_x)
-                    {
-                        largest_min_x = x;
-                        D_for_largest_min_x = D;
-                        Console.WriteLine("For D={0}, min x={1}, y={2}.", D, x, Math.Sqrt(y2));
-                    }
-                }
-            }
-
-            sw.Stop();
-            Console.WriteLine("elapsed: {0} ms", sw.Elapsed.TotalMilliseconds);
-            return D_for_largest_min_x;
-        }
-
-        private bool isPerfectSquare(long x)
-        {
-            // http://stackoverflow.com/a/4885965/301677 - won't work for really big numbers.
-            double sqrt = Math.Sqrt(x);
-            return sqrt % 1 == 0;
-        }
+        //private bool isPerfectSquare(long x)
+        //{
+        //    // http://stackoverflow.com/a/4885965/301677 - won't work for really big numbers.
+        //    double sqrt = Math.Sqrt(x);
+        //    return sqrt % 1 == 0;
+        //}
 
         private bool isPerfectSquare(double x)
         {
