@@ -2,6 +2,7 @@
  * https://projecteuler.net/problem=66
  * Diophantine equation: x^2 – Dy^2 = 1
  * Find the value of D <= 1000 in minimal solutions of x for which the largest value of x is obtained.
+ * The answer is 661.
  */
 using System;
 using System.Collections.Generic;
@@ -60,17 +61,65 @@ namespace Problems60to69
     {
         public long soln1()
         {
-            List<decimal> seq = fractionExpand(7);
+            int D;
+            BigInteger largest_min_x = 1;
+            long D_for_largest_min_x = 0;
 
-            StringBuilder sb = new StringBuilder();
-            foreach (var d in seq) 
-                sb.AppendFormat("{0} ", d);
-            Console.WriteLine(sb);
+            var sw = Stopwatch.StartNew();
 
-            for (int i = 1; i <= 5; i++)
-                Console.WriteLine(getPartialValue(i, seq));
+            for (D = 2; D <= 1000; D++)
+            {
+                if (isPerfectSquare(D))
+                    continue;
 
-            return 0;
+                List<decimal> seq = fractionExpand(D);
+
+                //StringBuilder sb = new StringBuilder();
+                //sb.AppendFormat("Fraction expand for {0} is: ", D);
+                //foreach (var d in seq)
+                //    sb.AppendFormat("{0} ", d);
+                //Console.WriteLine(sb);
+
+                //for (int i = 0; i < 4; i++)
+                //    Console.WriteLine("seq[{0}] = {1}", i, getSeqValue(seq, i));
+
+                bool solnFound = false;
+                int n = 1;
+                BigInteger x = 0;
+                BigInteger y = 0;
+                while (!solnFound)
+                {
+                    Fraction f = getPartialValue(n, seq);
+                    //Console.WriteLine("For n={0}, fraction is {1}.", n, f);
+                    // x^2 – Dy^2 = 1
+                    x = f.n;
+                    y = f.d;
+                    if ((x * x) - (D * y * y) == 1)
+                        solnFound = true;
+                    else
+                        n++;
+                }
+                if (x > largest_min_x)
+                {
+                    largest_min_x = x;
+                    D_for_largest_min_x = D;
+                    Console.WriteLine("For D={0}, min x={1:n0}, y={2:n0}.", D, x, y);
+                }
+            }
+
+            sw.Stop();
+            Console.WriteLine("elapsed: {0} ms", sw.Elapsed.TotalMilliseconds);
+            return D_for_largest_min_x;
+        }
+
+        private decimal getSeqValue(List<decimal> a, int n)
+        {
+            // repeat the continued fraction sequence
+            // https://en.wikipedia.org/wiki/Continued_fraction
+            if (n == 0)
+                return a[0];
+            else
+                return a[(n - 1) % (a.Count - 1) + 1];
         }
 
         private Fraction getPartialValue(int n, List<decimal> a)
@@ -79,14 +128,14 @@ namespace Problems60to69
             if (n == 1)
                 return new Fraction(2, 1);
             int nCurr = n - 1;
-            Fraction pVal = new Fraction(1, a[nCurr]);
+            Fraction pVal = new Fraction(1, getSeqValue(a,nCurr));
             nCurr--;
-            pVal.add_x(a[nCurr]);
+            pVal.add_x(getSeqValue(a, nCurr));
             while (nCurr > 0)
             {
                 pVal.invert();
                 nCurr--;
-                pVal.add_x(a[nCurr]);
+                pVal.add_x(getSeqValue(a,nCurr));
             }
             return pVal;
         }
