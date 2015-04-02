@@ -111,7 +111,6 @@ namespace Problems60to69
                 string.Join<int>(", ", this.getTuple(2)) + "; " +
                 string.Join<int>(", ", this.getTuple(3)) + "; " +
                 string.Join<int>(", ", this.getTuple(4));
-            
         }
     }
 
@@ -121,19 +120,6 @@ namespace Problems60to69
         {
             var sw = Stopwatch.StartNew();
 
-            //// invalid.
-            //var ring = new ThreeGonRing(new int[6] { 1, 2, 3, 4, 5, 5 });
-            //Console.WriteLine("{0} - Valid? - {1} / Magic? - {2}", ring.ToString(), ring.getMagicRingSum(), ring.isMagicRing());
-
-            //// valid, not magic.
-            //ring = new ThreeGonRing(new int[6] { 1, 2, 3, 4, 5, 6 });
-            //Console.WriteLine("{0} - Valid? - {1} / Magic? - {2}", ring.ToString(), ring.getMagicRingSum(), ring.isMagicRing());
-
-            //// magic!
-            //ring = new ThreeGonRing(new int[6] { 4, 3, 2, 6, 1, 5 });
-            //Console.WriteLine("{0} - Valid? - {1} / Magic? - {2}", ring.ToString(), ring.getMagicRingSum(), ring.isMagicRing());
-
-            // messing with permutations.
             List<int> p1 = new List<int>();
             int nPerms = 0;
             int nMagic = 0;
@@ -145,10 +131,8 @@ namespace Problems60to69
             {
                 //Console.WriteLine(string.Join<int>(", ", p));
                 var ring = new FiveGonRing(p.ToArray());
-                if (!ring.isValidRing())
-                {
-                    throw new Exception(string.Format("{0} is not a valid ring.", ring.ToString()));
-                }
+                Debug.Assert(ring.isValidRing(), string.Format("{0} is not a valid ring.", ring.ToString()));
+
                 int s = ring.getMagicRingSum();
                 if (s > 0)
                 {
@@ -181,18 +165,43 @@ namespace Problems60to69
             return 0;
         }
 
+        // _can_ the current partial permutation be a magic ring?
+        private bool canBeMagic(List<int> perm)
+        {
+            if (perm.Count == 6)
+            {
+                var n1 = new int[3] { perm[0], perm[1], perm[2] };
+                var n2 = new int[3] { perm[3], perm[2], perm[4] };
+                if (n1.Sum() != n2.Sum())
+                    return false;
+            }
+            return true;
+        }
+
+        // we can't have a 10 in pos 1,2,4,6, or 8.
+        private int[] no_ten = new int[] { 1, 2, 4, 6, 8 };
+
         private IEnumerable<List<int>> getAllPerms(List<int> perm)
         {
             if (perm.Count < 10)
             {
-                for (int i = 1; i <= 10; i++)
+                int max_i = 10;
+                if (no_ten.Contains(perm.Count))
+                    max_i = 9;
+
+                for (int i = 1; i <= max_i; i++)
                 {
                     if (!perm.Contains(i))
                     {
                         var p2 = new List<int>(perm);
                         p2.Add(i);
-                        foreach (var p in getAllPerms(p2))
-                            yield return p;
+                        if (canBeMagic(p2))
+                        {
+                            foreach (var p in getAllPerms(p2))
+                            {
+                                yield return p;
+                            }
+                        }
                     }
                 }
             }
