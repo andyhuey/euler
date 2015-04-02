@@ -56,6 +56,29 @@ namespace Problems60to69
             return true;
         }
 
+        public bool isRotationOf(ThreeGonRing ring)
+        {
+            // 0,1,2 -> 1,2,0
+            if (this.getTuple(0).SequenceEqual(ring.getTuple(1))
+                && this.getTuple(1).SequenceEqual(ring.getTuple(2))
+                && this.getTuple(2).SequenceEqual(ring.getTuple(0)))
+                return true;
+            // 0,1,2 -> 2,0,1
+            if (this.getTuple(0).SequenceEqual(ring.getTuple(2))
+                && this.getTuple(1).SequenceEqual(ring.getTuple(0))
+                && this.getTuple(2).SequenceEqual(ring.getTuple(1)))
+                return true;
+            // otherwise:
+            return false;
+        }
+
+        public string getDigitString()
+        {
+            return string.Join<int>("", this.getTuple(0)) + 
+                string.Join<int>("", this.getTuple(1)) + 
+                string.Join<int>("", this.getTuple(2));
+        }
+
         public override string ToString()
         {
             //return base.ToString();
@@ -88,6 +111,8 @@ namespace Problems60to69
             List<int> p1 = new List<int>();
             int nPerms = 0;
             int nMagic = 0;
+            List<ThreeGonRing> magicRings = new List<ThreeGonRing>();
+
             foreach (var p in getAllPerms(p1))
             {
                 //Console.WriteLine(string.Join<int>(", ", p));
@@ -99,13 +124,25 @@ namespace Problems60to69
                 int s = ring.getMagicRingSum();
                 if (s > 0)
                 {
-                    Console.WriteLine("{0} is a magic ring, with sum {1}.", ring.ToString(), s);
-                    nMagic++;
+                    if (!magicRings.Any(r => ring.isRotationOf(r)))
+                    {
+                        //Console.WriteLine("{0} is a magic ring, with sum {1}.", ring.ToString(), s);
+                        nMagic++;
+                        magicRings.Add(ring);
+                    }
                 }
                 nPerms++;
             }
+
+            foreach(var ring in magicRings.OrderBy(x => x.getMagicRingSum()))
+            {
+                Console.WriteLine("{0} is a magic ring, with sum {1}.", ring.ToString(), ring.getMagicRingSum());
+            }
+
             Console.WriteLine("{0} permutations generated.", nPerms);
             Console.WriteLine("{0} magic rings generated.", nMagic);
+
+            Console.WriteLine("The max digit string is {0}.", magicRings.Max(x => x.getDigitString()));
 
             sw.Stop();
             Console.WriteLine("elapsed: {0} ms", sw.Elapsed.TotalMilliseconds);
