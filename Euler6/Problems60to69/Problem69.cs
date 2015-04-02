@@ -18,6 +18,7 @@ namespace Problems60to69
     {
         const int MAX_N = 1000000;
         Dictionary<Tuple<int, int>, int> gcd_cache = new Dictionary<Tuple<int, int>, int>();
+        int cache_hits = 0;
 
         public long soln1()
         {
@@ -30,6 +31,13 @@ namespace Problems60to69
                 List<int> coprimes = new List<int>();
                 int phi_n;
                 float n_over_phi_n;
+
+                // phi(n) is >= sqrt(n) ...but that's not really helpful, I think.
+                //if ((float)n / Math.Sqrt(n) < max_n_over_phi_n)
+                //{
+                //    Console.WriteLine("Skipping n={0}.", n);
+                //    continue;
+                //}
 
                 for (int m = 1; m < n; m++)
                 {
@@ -55,7 +63,7 @@ namespace Problems60to69
                 {
                     max_n_over_phi_n = n_over_phi_n;
                     n_for_max_n_over_phi_n = n;
-                    Console.WriteLine("For n={0}, n/phi(n)={1:n4} [cache size={2}]", n, n_over_phi_n, gcd_cache.Count);
+                    Console.WriteLine("For n={0}, n/phi(n)={1:n4} [cache hits={2}, size={3}]", n, n_over_phi_n, cache_hits, gcd_cache.Count);
                 }
 
                 //Console.WriteLine("For n={0}, coprimes are {1}.", n, string.Join(", ", coprimes));
@@ -76,7 +84,10 @@ namespace Problems60to69
             //Console.WriteLine("a={0}, b={1}", a, b);
             Tuple<int, int> tkey = new Tuple<int, int>(a, b);
             if (gcd_cache.ContainsKey(tkey))
+            {
+                cache_hits++;
                 return gcd_cache[tkey];
+            }
 
             int rv;
             if (a == b)
