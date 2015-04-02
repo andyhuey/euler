@@ -76,6 +76,7 @@ namespace Problems60to69
         public bool isRotationOf(FiveGonRing ring)
         {
             // I'm sure there's a much better way of doing this...
+            // (and no longer technically needed.)
             int[] t1 = new int[] { 0, 1, 2, 3, 4 };
             // 0,1,2,3,4 -> 1,2,3,4,0
             if (this.checkSeqEq(t1, new int[] { 1, 2, 3, 4, 0 }, ring))
@@ -175,6 +176,15 @@ namespace Problems60to69
                 if (n1.Sum() != n2.Sum())
                     return false;
             }
+            
+            // note also the requirement that we start with the numerically-lowest external node.
+            if (perm.Count == 4 && perm[3] < perm[0])
+                return false;
+            if (perm.Count == 6 && perm[5] < perm[0])
+                return false;
+            if (perm.Count == 8 && perm[7] < perm[0])
+                return false;
+
             return true;
         }
 
