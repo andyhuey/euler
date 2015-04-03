@@ -1,9 +1,7 @@
 ﻿/*
  * http://projecteuler.net/problem=69
  * Totient maximum
- * (brute force: runs out of steam after 2310.)
- * - caching the GCDs doesn't help much.
- * - short-circuiting on n/phi < max doesn't do much either.
+ * third try at this...
  */
 using System;
 using System.Collections.Generic;
@@ -17,89 +15,60 @@ namespace Problems60to69
 {
     class Problem69
     {
-        bool[] primes;
-        const int nPrimeMax = 1000000;
+        const int MAX_N = 1000000;
 
         public long soln1()
         {
             var sw = Stopwatch.StartNew();
             long n_for_max_n_over_phi_n = 0;
-            float max_n_over_phi_n = 0;
+            //float max_n_over_phi_n = 0;
+            float min_denom = MAX_N;
 
-            getPrimes();
-            Console.WriteLine("Got primes...");
-
-            IEnumerable<int> lstPrimes = Enumerable.Range(2, nPrimeMax - 2).Where(x => primes[x]);
-
-            foreach (int p in lstPrimes)
+            for (int n = 2; n <= MAX_N; n++)
             {
-                foreach (int q in lstPrimes.Where(x => x > p))
+                var pn = getPrimeFactors(n).Distinct();
+                float denom = 1;
+                foreach (var p in pn)
+                    denom *= (1 - (float)1 / p);
+                //Console.WriteLine("For n={0}, n/phi(n)={1:n2}", n, (float)1/denom);
+                // we need to find N with the snallest denominator.
+                if (denom < min_denom)
                 {
-                    //Console.WriteLine("(p={0}, q={1})", p, q);
-                    long n;
-                    try
-                    {
-                        n = checked(p * q);
-                    }
-                    catch (OverflowException)
-                    {
-                        //Console.WriteLine("(break on p={0}, q={1})", p, q);
-                        break;
-                    }
-                    if (n > nPrimeMax)
-                        break;
-                    
-                    long phi_n = (p - 1) * (q - 1);
-                    float n_over_phi_n = (float)n / phi_n;
-                    
-                    if (n_over_phi_n > max_n_over_phi_n)
-                    {
-                        max_n_over_phi_n = n_over_phi_n;
-                        n_for_max_n_over_phi_n = n;
-                        Console.WriteLine("For n={0}, n/phi(n)={1:n4} (p={2}, q={3})", n, n_over_phi_n, p, q);
-                    }
+                    min_denom = denom;
+                    n_for_max_n_over_phi_n = n;
+                    Console.WriteLine("For n={0}, n/phi(n)={1:n2}", n, (float)1/denom);
                 }
             }
-                                       
+
             sw.Stop();
             Console.WriteLine("elapsed: {0} ms", sw.Elapsed.TotalMilliseconds);
 
             return n_for_max_n_over_phi_n;
         }
 
-        
-        // prime methods copied from problem 60.
-        private bool isPrime(int n)
+        // from problem 47.
+        public IEnumerable<long> getPrimeFactors(long n)
         {
-            return primes[n];
-        }
+            long loopIterations = 0;
+            long i = 2;
+            //List<long> primeFactors = new List<long>();
 
-        private void getPrimes()
-        {
-            // get primes
-            primes = new bool[nPrimeMax];
-            int p = 2;
-            int sqrt_max = (int)Math.Floor(Math.Sqrt(nPrimeMax));
-
-            // initialize all to true
-            for (int i = 2; i < nPrimeMax; i++)
-                primes[i] = true;
-
-            while (p <= sqrt_max)
+            while (n > 1)
             {
-                // cross out all the multiple of p.
-                for (int i = p * p; i < nPrimeMax; i += p)
+                loopIterations++;
+                if (n % i == 0)
                 {
-                    primes[i] = false;
+                    //primeFactors.Add(i);
+                    yield return i;
+                    n = n / i;
+                    i = 2;
                 }
-
-                // get the next p.
-                do
+                else
                 {
-                    p++;
-                } while (!primes[p]);
+                    i++;
+                }
             }
         }
-
+        
     }
 }
