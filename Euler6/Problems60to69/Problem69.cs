@@ -1,7 +1,7 @@
 ﻿/*
  * http://projecteuler.net/problem=69
  * Totient maximum
- * third try at this...
+ * The answer is 510510.
  */
 using System;
 using System.Collections.Generic;
@@ -15,7 +15,9 @@ namespace Problems60to69
 {
     class Problem69
     {
+        const int nPrimeMax = 1000000;
         const int MAX_N = 1000000;
+        bool[] primes;
 
         public long soln1()
         {
@@ -24,11 +26,31 @@ namespace Problems60to69
             //float max_n_over_phi_n = 0;
             float min_denom = MAX_N;
 
+            List<int>[] primeFactors = new List<int>[MAX_N+1];
+
+            getPrimes();
+            IEnumerable<int> lstPrimes = Enumerable.Range(2, nPrimeMax - 2).Where(x => primes[x]);
+            Console.WriteLine("Got {0} primes.", lstPrimes.Count());
+
+            foreach (int n in lstPrimes)
+            {
+                long n2 = n;
+                int i = 1;
+                while (n2 <= MAX_N)
+                {
+                    if (primeFactors[n2] == null)
+                        primeFactors[n2] = new List<int>();
+                    primeFactors[n2].Add(n);
+                    i++;
+                    n2 = n * i;
+                }
+            }
+            Console.WriteLine("Done filling in prime factor array.");
+
             for (int n = 2; n <= MAX_N; n++)
             {
-                var pn = getPrimeFactors(n).Distinct();
                 float denom = 1;
-                foreach (var p in pn)
+                foreach (var p in primeFactors[n])
                     denom *= (1 - (float)1 / p);
                 //Console.WriteLine("For n={0}, n/phi(n)={1:n2}", n, (float)1/denom);
                 // we need to find N with the snallest denominator.
@@ -36,8 +58,9 @@ namespace Problems60to69
                 {
                     min_denom = denom;
                     n_for_max_n_over_phi_n = n;
-                    Console.WriteLine("For n={0}, n/phi(n)={1:n2}", n, (float)1/denom);
+                    Console.WriteLine("For n={0}, n/phi(n)={1:n2}", n, (float)1 / denom);
                 }
+                //Console.WriteLine("Prime factors of {0} are: {1}", n, string.Join(", ", primeFactors[n]));
             }
 
             sw.Stop();
@@ -46,29 +69,32 @@ namespace Problems60to69
             return n_for_max_n_over_phi_n;
         }
 
-        // from problem 47.
-        public IEnumerable<long> getPrimeFactors(long n)
+        // prime method copied from problem 60.
+        private void getPrimes()
         {
-            long loopIterations = 0;
-            long i = 2;
-            //List<long> primeFactors = new List<long>();
+            // get primes
+            primes = new bool[nPrimeMax];
+            int p = 2;
+            int sqrt_max = (int)Math.Floor(Math.Sqrt(nPrimeMax));
 
-            while (n > 1)
+            // initialize all to true
+            for (int i = 2; i < nPrimeMax; i++)
+                primes[i] = true;
+
+            while (p <= sqrt_max)
             {
-                loopIterations++;
-                if (n % i == 0)
+                // cross out all the multiple of p.
+                for (int i = p * p; i < nPrimeMax; i += p)
                 {
-                    //primeFactors.Add(i);
-                    yield return i;
-                    n = n / i;
-                    i = 2;
+                    primes[i] = false;
                 }
-                else
+
+                // get the next p.
+                do
                 {
-                    i++;
-                }
+                    p++;
+                } while (!primes[p]);
             }
         }
-        
     }
 }
