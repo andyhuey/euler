@@ -23,7 +23,6 @@ namespace Problems60to69
         {
             var sw = Stopwatch.StartNew();
             long n_for_max_n_over_phi_n = 0;
-            //float max_n_over_phi_n = 0;
             float min_denom = MAX_N;
 
             List<int>[] primeFactors = new List<int>[MAX_N+1];
@@ -32,6 +31,16 @@ namespace Problems60to69
             IEnumerable<int> lstPrimes = Enumerable.Range(2, nPrimeMax - 2).Where(x => primes[x]);
             Console.WriteLine("Got {0} primes.", lstPrimes.Count());
 
+            // simplest solution: just multiply primes together and take the largest # under 1,000,000.
+            //long prod = 1;
+            //foreach (int n in lstPrimes)
+            //{
+            //    if (prod * n > MAX_N)
+            //        break;
+            //    prod *= n;
+            //}
+            //return prod;
+            
             foreach (int n in lstPrimes)
             {
                 long n2 = n;
@@ -52,7 +61,6 @@ namespace Problems60to69
                 float denom = 1;
                 foreach (var p in primeFactors[n])
                     denom *= (1 - (float)1 / p);
-                //Console.WriteLine("For n={0}, n/phi(n)={1:n2}", n, (float)1/denom);
                 // we need to find N with the snallest denominator.
                 if (denom < min_denom)
                 {
