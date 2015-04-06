@@ -12,7 +12,7 @@ namespace Problems70to79
         static void Main(string[] args)
         {
             var sw = Stopwatch.StartNew();
-            var myProblem = new Problem70();
+            var myProblem = new Problem71();
             Console.WriteLine("The answer is {0:n0} or {0}", myProblem.soln1());
 
             sw.Stop();
