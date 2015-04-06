@@ -11,8 +11,10 @@ using System.Threading.Tasks;
 
 namespace Problems70to79
 {
-    struct Fraction
+    struct Fraction : IComparable<Fraction>
     {
+        // borrowing some code from http://www.codeproject.com/Articles/11971/Fractions-in-C
+
         public int n { get; private set; }
         public int d { get; private set; }
 
@@ -40,14 +42,54 @@ namespace Problems70to79
             d = hld;
         }
 
+        public int CompareTo(Fraction f2)
+        {
+            // common decominator method.
+            long val1 = this.n * f2.d;
+            long val2 = f2.n * this.d;
+            return val1.CompareTo(val2);
+        }
+
+        public static bool operator ==(Fraction a, Fraction b)
+        {
+            return (decimal)a.n * b.d == (decimal)b.n * a.d;
+        }
+
+        public static bool operator !=(Fraction a, Fraction b)
+        {
+            return (!(a == b));
+        }
+
+        public static bool operator >(Fraction a, Fraction b)
+        {
+            return (decimal)a.n * b.d > (decimal)b.n * a.d;
+        }
+
+        public static bool operator >=(Fraction a, Fraction b)
+        {
+            return (!(a < b));
+        }
+
+        public static bool operator <(Fraction a, Fraction b)
+        {
+            return (decimal)a.n * b.d < (decimal)b.n * a.d;
+        }
+
+        public static bool operator <=(Fraction a, Fraction b)
+        {
+            return (!(a > b));
+        }
     }
 
     class Problem71
     {
-        const int MAX_D = 8;
+        const int MAX_D = 10000;
         Dictionary<Tuple<int, int>, int> gcd_cache = new Dictionary<Tuple<int, int>, int>();
         int cache_hits = 0;
-        List<Fraction> fracList = new List<Fraction>();
+        //List<Fraction> fracList = new List<Fraction>();
+        
+        Fraction targetFrac = new Fraction(3, 7);
+        Fraction bestMatch = new Fraction(0, 1);
 
         public long soln1()
         {
@@ -56,20 +98,25 @@ namespace Problems70to79
             {
                 for (int n = 1; n < d; n++)
                 {
-                    if (gcd(n, d) == 1)
-                        fracList.Add(new Fraction(n, d));
+                    var f = new Fraction(n, d);                    
+                    // skip to next denominator if we overshoot target.
+                    if (f > targetFrac)
+                        break;
+                    if (f > bestMatch && f < targetFrac && gcd(n, d) == 1)
+                        bestMatch = f;
                 }
             }
 
             // sort the list.
-            foreach (var f in fracList.OrderBy(x => (float)x.n / x.d))
-            {
-                Console.Write(f);
-                Console.Write(", ");
-            }
-            Console.WriteLine();
+            //fracList.Sort();
+            //foreach (var f in fracList)
+            //{
+            //    Console.Write(f);
+            //    Console.Write(", ");
+            //}
+            Console.WriteLine("The best match is: {0}", bestMatch);
 
-            return 0;
+            return bestMatch.n;
         }
 
         private int gcd(int a, int b)
