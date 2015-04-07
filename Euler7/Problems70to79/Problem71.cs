@@ -1,7 +1,7 @@
 ﻿/*
  * http://projecteuler.net/problem=71
  * Ordered Fractions
- * 
+ * The best match is: 428570/999997
  */
 using System;
 using System.Collections.Generic;
@@ -79,11 +79,26 @@ namespace Problems70to79
         {
             return (!(a > b));
         }
+
+        public override bool Equals(Object o)
+        {
+            // https://msdn.microsoft.com/en-us/library/7h9bszxx%28v=vs.100%29.aspx
+            // https://msdn.microsoft.com/en-us/library/ms173147%28v=vs.80%29.aspx
+            if (o == null)
+                return false;
+            Fraction f2 = (Fraction)o;
+            return this == f2;
+        }
+
+        public override int GetHashCode()
+        {
+            return this.n ^ this.d;
+        }
     }
 
     class Problem71
     {
-        const int MAX_D = 10000;
+        const int MAX_D = 1000000;
         
         Fraction targetFrac = new Fraction(3, 7);
         Fraction bestMatch = new Fraction(0, 1);
@@ -92,26 +107,18 @@ namespace Problems70to79
         {
             for (int d = MAX_D; d >= 2; d--)
             {
-                int n = d - 1;
-                var f = new Fraction(n, d);
-                //Console.WriteLine("Starting with {0}.", f);
-                // find the first one that's left of the target.
-                while (f >= targetFrac)
-                    f.n -= 1;
-                while (f > bestMatch)
+                double cn = (double)(targetFrac.n * d) / targetFrac.d;
+                int cni = (int)Math.Floor(cn);
+                var f = new Fraction(cni, d);
+                if (f == targetFrac)
+                    continue;
+                if (f > bestMatch && gcd(f.n, f.d) == 1)
                 {
-                    if (gcd(f.n, f.d) == 1)
-                    {
-                        bestMatch = f;
-                        Console.WriteLine("Best match is {0}.", f);
-                        break;
-                    }
-                    else
-                    {
-                        f.n -= 1;
-                    }
+                    bestMatch = f;
+                    Console.WriteLine("Best match so far is {0}.", f);
                 }
             }
+
 
             Console.WriteLine("The best match is: {0}", bestMatch);
 
@@ -129,7 +136,7 @@ namespace Problems70to79
         {
             // http://en.wikipedia.org/wiki/Greatest_common_divisor
             // assuming a & b are > 0.
-            Console.Write("a={0}, b={1} ", a, b);
+            //Console.Write("a={0}, b={1} ", a, b);
             int t;
             if (a > b)
                 swap(ref a, ref b);
@@ -140,7 +147,7 @@ namespace Problems70to79
                 a = b;
                 b = t;
             }
-            Console.WriteLine(" --> {0}", a);
+            //Console.WriteLine(" --> {0}", a);
             return a;
         }
 
