@@ -82,6 +82,7 @@ namespace Problems70to79
 
         public override bool Equals(Object o)
         {
+            // just adding this and GetHashCode() in to squelch warnings.
             // https://msdn.microsoft.com/en-us/library/7h9bszxx%28v=vs.100%29.aspx
             // https://msdn.microsoft.com/en-us/library/ms173147%28v=vs.80%29.aspx
             if (o == null)
@@ -137,15 +138,15 @@ namespace Problems70to79
             // http://en.wikipedia.org/wiki/Greatest_common_divisor
             // assuming a & b are > 0.
             //Console.Write("a={0}, b={1} ", a, b);
-            int t;
+            int r;
             if (a > b)
                 swap(ref a, ref b);
 
             while (b != 0)
             {
-                t = a % b;
+                r = a % b;
                 a = b;
-                b = t;
+                b = r;
             }
             //Console.WriteLine(" --> {0}", a);
             return a;
