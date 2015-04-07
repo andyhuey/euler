@@ -15,8 +15,8 @@ namespace Problems70to79
     {
         // borrowing some code from http://www.codeproject.com/Articles/11971/Fractions-in-C
 
-        public int n { get; private set; }
-        public int d { get; private set; }
+        public int n { get; set; }
+        public int d { get; set; }
 
         public Fraction(int n, int d)
             : this()
@@ -45,14 +45,14 @@ namespace Problems70to79
         public int CompareTo(Fraction f2)
         {
             // common decominator method.
-            long val1 = this.n * f2.d;
-            long val2 = f2.n * this.d;
+            long val1 = checked((long)this.n * f2.d);
+            long val2 = checked((long)f2.n * this.d);
             return val1.CompareTo(val2);
         }
 
         public static bool operator ==(Fraction a, Fraction b)
         {
-            return (decimal)a.n * b.d == (decimal)b.n * a.d;
+            return a.CompareTo(b) == 0;
         }
 
         public static bool operator !=(Fraction a, Fraction b)
@@ -62,7 +62,7 @@ namespace Problems70to79
 
         public static bool operator >(Fraction a, Fraction b)
         {
-            return (decimal)a.n * b.d > (decimal)b.n * a.d;
+            return a.CompareTo(b) > 0;
         }
 
         public static bool operator >=(Fraction a, Fraction b)
@@ -72,7 +72,7 @@ namespace Problems70to79
 
         public static bool operator <(Fraction a, Fraction b)
         {
-            return (decimal)a.n * b.d < (decimal)b.n * a.d;
+            return a.CompareTo(b) < 0;
         }
 
         public static bool operator <=(Fraction a, Fraction b)
@@ -84,65 +84,64 @@ namespace Problems70to79
     class Problem71
     {
         const int MAX_D = 10000;
-        Dictionary<Tuple<int, int>, int> gcd_cache = new Dictionary<Tuple<int, int>, int>();
-        int cache_hits = 0;
-        //List<Fraction> fracList = new List<Fraction>();
         
         Fraction targetFrac = new Fraction(3, 7);
         Fraction bestMatch = new Fraction(0, 1);
 
         public long soln1()
         {
-            // brute force, for small set.
-            for (int d = 2; d <= MAX_D; d++)
+            for (int d = MAX_D; d >= 2; d--)
             {
-                for (int n = 1; n < d; n++)
+                int n = d - 1;
+                var f = new Fraction(n, d);
+                //Console.WriteLine("Starting with {0}.", f);
+                // find the first one that's left of the target.
+                while (f >= targetFrac)
+                    f.n -= 1;
+                while (f > bestMatch)
                 {
-                    var f = new Fraction(n, d);                    
-                    // skip to next denominator if we overshoot target.
-                    if (f > targetFrac)
-                        break;
-                    if (f > bestMatch && f < targetFrac && gcd(n, d) == 1)
+                    if (gcd(f.n, f.d) == 1)
+                    {
                         bestMatch = f;
+                        Console.WriteLine("Best match is {0}.", f);
+                        break;
+                    }
+                    else
+                    {
+                        f.n -= 1;
+                    }
                 }
             }
 
-            // sort the list.
-            //fracList.Sort();
-            //foreach (var f in fracList)
-            //{
-            //    Console.Write(f);
-            //    Console.Write(", ");
-            //}
             Console.WriteLine("The best match is: {0}", bestMatch);
 
             return bestMatch.n;
         }
 
+        private void swap(ref int a, ref int b)
+        {
+            int t = a;
+            a = b;
+            b = t;
+        }
+
         private int gcd(int a, int b)
         {
-            // copied from problem 33 (& old ver of p 69).
             // http://en.wikipedia.org/wiki/Greatest_common_divisor
-            // Using Euclid's algorithm
             // assuming a & b are > 0.
-            //Console.WriteLine("a={0}, b={1}", a, b);
-            Tuple<int, int> tkey = new Tuple<int, int>(a, b);
-            if (gcd_cache.ContainsKey(tkey))
+            Console.Write("a={0}, b={1} ", a, b);
+            int t;
+            if (a > b)
+                swap(ref a, ref b);
+
+            while (b != 0)
             {
-                cache_hits++;
-                return gcd_cache[tkey];
+                t = a % b;
+                a = b;
+                b = t;
             }
-
-            int rv;
-            if (a == b)
-                rv = a;
-            else if (a > b)
-                rv = gcd(a - b, b);
-            else
-                rv = gcd(a, b - a);
-
-            gcd_cache[tkey] = rv;
-            return rv;
+            Console.WriteLine(" --> {0}", a);
+            return a;
         }
 
     }
