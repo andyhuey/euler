@@ -2,6 +2,7 @@
  * http://projecteuler.net/problem=72
  * Counting Fractions
  * For MAX_D = 8 -> 21; 80 -> 1965; 8000 -> 19,455,781
+ * for 100,000 ->  3,039,650,753 (probably)
  */
 using System;
 using System.Collections.Generic;
@@ -16,9 +17,40 @@ namespace Problems70to79
         const int nPrimeMax = 1000000;
         bool[] primes;
 
-        const int MAX_D = 8000; //1000000;
+        const int MAX_D = 100000;
 
         public long soln1()
+        {
+            // from http://en.wikipedia.org/wiki/Farey_sequence, 'next term'
+            long nCount = 0;
+            int a, b, c, d;
+            a = 0;
+            b = 1;
+            c = 1;
+            d = MAX_D;
+
+            while (c <= MAX_D)
+            {
+                int k = checked((MAX_D + b) / d);
+                int a1 = c;
+                int b1 = d;
+                c = checked(k * c - a);
+                d = checked(k * d - b);
+                a = a1;
+                b = b1;
+                //Console.Write("{0}/{1}, ", a, b);
+                //Console.WriteLine("{0}/{1} [c={2}, d= {3}], ", a, b, c, d);
+                nCount++;
+                if (nCount % 1000000 == 0)
+                    Console.WriteLine("[a={0}, b={1}, c={2}, d={3}] {4:n0} so far...", a, b, c, d, nCount);
+            }
+            nCount--; // drop 1/1.
+            Console.WriteLine();
+
+            return nCount;
+        }
+
+        public long soln1_maybe()
         {
             long nCount = 0;
 
@@ -47,6 +79,7 @@ namespace Problems70to79
                 var x = Enumerable.Range(1, d - 1).ToList();
                 foreach (int p in primeFactors[d])
                 {
+                    // remove all prime factors and their multiples.
                     int p2 = p;
                     int i = 1;
                     while (p2 < d)
@@ -57,7 +90,8 @@ namespace Problems70to79
                     }
                 }
                 nCount += x.Count();
-                //Console.WriteLine("For d={0}, we have {1} fractions.", d, x.Count());
+                //if (d % 1000 == 0)
+                //    Console.WriteLine("For d={0}, we have {1} fractions.", d, x.Count());
                 //Console.WriteLine("For d={0}: {1}", d, string.Join(", ", primeFactors[d]));
             }
 
