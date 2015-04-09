@@ -2,7 +2,8 @@
  * http://projecteuler.net/problem=72
  * Counting Fractions
  * For MAX_D = 8 -> 21; 80 -> 1965; 8000 -> 19,455,781
- * for 100,000 ->  3,039,650,753 (probably)
+ * for 100,000 ->  3,039,650,753
+ * for 1,000,000 -> The answer is 303,963,552,391 or 303963552391
  */
 using System;
 using System.Collections.Generic;
@@ -17,9 +18,66 @@ namespace Problems70to79
         const int nPrimeMax = 1000000;
         bool[] primes;
 
-        const int MAX_D = 100000;
+        const int MAX_D = 1000000;
 
         public long soln1()
+        {
+            long nCount = 0;
+
+            getPrimes();
+            IEnumerable<int> lstPrimes = Enumerable.Range(2, nPrimeMax - 2).Where(x => primes[x]);
+            Console.WriteLine("Got {0} primes.", lstPrimes.Count());
+
+            List<int>[] primeFactors = new List<int>[MAX_D + 1];
+            foreach (int n in lstPrimes)
+            {
+                long n2 = n;
+                int i = 1;
+                while (n2 <= MAX_D)
+                {
+                    if (primeFactors[n2] == null)
+                        primeFactors[n2] = new List<int>();
+                    primeFactors[n2].Add(n);
+                    i++;
+                    n2 = n * i;
+                }
+            }
+            Console.WriteLine("Done filling in prime factor array.");
+
+            long[] totient = new long[MAX_D + 1];
+            foreach (int p in lstPrimes)
+            {
+                int k = 1;
+                long pk = p;
+                while (pk <= MAX_D)
+                {
+                    //totient[pk] = pk * (1 - (1 / p));
+                    totient[pk] = pk - (pk / p);
+                    //Console.WriteLine("p={0}, pk={1}, phi(pk)={2}", p, pk, totient[pk]);
+                    k++;
+                    pk = (long)Math.Pow(p, k);
+                }
+            }
+
+            for (int i = 2; i <= MAX_D; i++)
+            {
+                if (totient[i] == 0)
+                {
+                    totient[i] = i;
+                    foreach (int p in primeFactors[i])
+                        totient[i] -= totient[i] / p;
+                }
+            }
+
+            //for (int i = 0; i <= MAX_D; i++)
+            //    Console.WriteLine("phi({0}) = {1}", i, totient[i]);
+
+            nCount = totient.Sum();
+
+            return nCount;
+        }
+        
+        public long soln1_farey_next_term()
         {
             // from http://en.wikipedia.org/wiki/Farey_sequence, 'next term'
             long nCount = 0;
