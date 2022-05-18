@@ -12,8 +12,10 @@ namespace Problems70to79
         static void Main(string[] args)
         {
             var sw = Stopwatch.StartNew();
-            var myProblem = new Problem72();
-            Console.WriteLine("The answer is {0:n0} or {0}", myProblem.soln1());
+            var myProblem = new Problem73(8);
+            Console.WriteLine("The answer for MAX D {0} is {1:n0} or {1}", 
+                myProblem.MaxD,
+                myProblem.soln1());
 
             sw.Stop();
             Console.WriteLine("elapsed: {0} ms", sw.Elapsed.TotalMilliseconds);

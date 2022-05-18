@@ -165,7 +165,7 @@ namespace Problems70to79
             {
                 for (int n = 1; n < d; n++)
                 {
-                    if (gcd(n, d) == 1)
+                    if (Utils.gcd(n, d) == 1)
                         nCount++;
                 }
             }
@@ -201,30 +201,5 @@ namespace Problems70to79
             }
         }
 
-        private void swap(ref int a, ref int b)
-        {
-            int t = a;
-            a = b;
-            b = t;
-        }
-
-        private int gcd(int a, int b)
-        {
-            // http://en.wikipedia.org/wiki/Greatest_common_divisor
-            // assuming a & b are > 0.
-            //Console.Write("a={0}, b={1} ", a, b);
-            int r;
-            if (a > b)
-                swap(ref a, ref b);
-
-            while (b != 0)
-            {
-                r = a % b;
-                a = b;
-                b = r;
-            }
-            //Console.WriteLine(" --> {0}", a);
-            return a;
-        }
     }
 }

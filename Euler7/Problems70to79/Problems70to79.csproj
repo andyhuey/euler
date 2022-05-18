@@ -44,9 +44,11 @@
   <ItemGroup>
     <Compile Include="Problem70.cs" />
     <Compile Include="Problem71.cs" />
+    <Compile Include="Problem73.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Problem72.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
