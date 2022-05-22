@@ -25,7 +25,7 @@ namespace Problems70to79
 
             List<int>[] primeFactors = new List<int>[MAX_N + 1];
 
-            getPrimes();
+            primes = Utils.getPrimes(nPrimeMax);
             IEnumerable<int> lstPrimes = Enumerable.Range(2, nPrimeMax - 2).Where(x => primes[x]);
             Console.WriteLine("Got {0} primes.", lstPrimes.Count());
 
@@ -65,34 +65,6 @@ namespace Problems70to79
             }
 
             return n_for_min_n_over_phi_n;
-        }
-
-        // prime method copied from problem 60.
-        private void getPrimes()
-        {
-            // get primes
-            primes = new bool[nPrimeMax];
-            int p = 2;
-            int sqrt_max = (int)Math.Floor(Math.Sqrt(nPrimeMax));
-
-            // initialize all to true
-            for (int i = 2; i < nPrimeMax; i++)
-                primes[i] = true;
-
-            while (p <= sqrt_max)
-            {
-                // cross out all the multiple of p.
-                for (int i = p * p; i < nPrimeMax; i += p)
-                {
-                    primes[i] = false;
-                }
-
-                // get the next p.
-                do
-                {
-                    p++;
-                } while (!primes[p]);
-            }
         }
 
         private bool isPermutation(long n1, long n2)

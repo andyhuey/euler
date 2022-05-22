@@ -34,5 +34,35 @@ namespace Problems70to79
             a = b;
             b = t;
         }
+
+        // prime method copied from problem 60.
+        public static bool[] getPrimes(int nPrimeMax)
+        {
+            // get primes
+            bool[] primes = new bool[nPrimeMax];
+            int p = 2;
+            int sqrt_max = (int)Math.Floor(Math.Sqrt(nPrimeMax));
+
+            // initialize all to true
+            for (int i = 2; i < nPrimeMax; i++)
+                primes[i] = true;
+
+            while (p <= sqrt_max)
+            {
+                // cross out all the multiple of p.
+                for (int i = p * p; i < nPrimeMax; i += p)
+                {
+                    primes[i] = false;
+                }
+
+                // get the next p.
+                do
+                {
+                    p++;
+                } while (!primes[p]);
+            }
+            return primes;
+        }
+
     }
 }

@@ -15,25 +15,37 @@ namespace Problems70to79
 {
     class Problem72
     {
+        public int MaxD;
         const int nPrimeMax = 1000000;
         bool[] primes;
 
-        const int MAX_D = 1000000;
+        public static void run()
+        {
+            var myProblem = new Problem72(1000000);
+            var ans = myProblem.soln1();
+            Console.WriteLine("The answer for MAX D {0} is {1:n0} or {1}",
+                myProblem.MaxD, ans);
+        }
+
+        public Problem72(int maxD)
+        {
+            MaxD = maxD;
+        }
 
         public long soln1()
         {
             long nCount = 0;
 
-            getPrimes();
+            primes = Utils.getPrimes(nPrimeMax);
             IEnumerable<int> lstPrimes = Enumerable.Range(2, nPrimeMax - 2).Where(x => primes[x]);
             Console.WriteLine("Got {0} primes.", lstPrimes.Count());
 
-            List<int>[] primeFactors = new List<int>[MAX_D + 1];
+            List<int>[] primeFactors = new List<int>[MaxD + 1];
             foreach (int n in lstPrimes)
             {
                 long n2 = n;
                 int i = 1;
-                while (n2 <= MAX_D)
+                while (n2 <= MaxD)
                 {
                     if (primeFactors[n2] == null)
                         primeFactors[n2] = new List<int>();
@@ -44,14 +56,13 @@ namespace Problems70to79
             }
             Console.WriteLine("Done filling in prime factor array.");
 
-            long[] totient = new long[MAX_D + 1];
+            long[] totient = new long[MaxD + 1];
             foreach (int p in lstPrimes)
             {
                 int k = 1;
                 long pk = p;
-                while (pk <= MAX_D)
+                while (pk <= MaxD)
                 {
-                    //totient[pk] = pk * (1 - (1 / p));
                     totient[pk] = pk - (pk / p);
                     //Console.WriteLine("p={0}, pk={1}, phi(pk)={2}", p, pk, totient[pk]);
                     k++;
@@ -59,7 +70,7 @@ namespace Problems70to79
                 }
             }
 
-            for (int i = 2; i <= MAX_D; i++)
+            for (int i = 2; i <= MaxD; i++)
             {
                 if (totient[i] == 0)
                 {
@@ -85,11 +96,11 @@ namespace Problems70to79
             a = 0;
             b = 1;
             c = 1;
-            d = MAX_D;
+            d = MaxD;
 
-            while (c <= MAX_D)
+            while (c <= MaxD)
             {
-                int k = checked((MAX_D + b) / d);
+                int k = checked((MaxD + b) / d);
                 int a1 = c;
                 int b1 = d;
                 c = checked(k * c - a);
@@ -112,16 +123,16 @@ namespace Problems70to79
         {
             long nCount = 0;
 
-            getPrimes();
+            primes = Utils.getPrimes(nPrimeMax);
             IEnumerable<int> lstPrimes = Enumerable.Range(2, nPrimeMax - 2).Where(x => primes[x]);
             Console.WriteLine("Got {0} primes.", lstPrimes.Count());
 
-            List<int>[] primeFactors = new List<int>[MAX_D + 1];
+            List<int>[] primeFactors = new List<int>[MaxD + 1];
             foreach (int n in lstPrimes)
             {
                 long n2 = n;
                 int i = 1;
-                while (n2 <= MAX_D)
+                while (n2 <= MaxD)
                 {
                     if (primeFactors[n2] == null)
                         primeFactors[n2] = new List<int>();
@@ -132,7 +143,7 @@ namespace Problems70to79
             }
             Console.WriteLine("Done filling in prime factor array.");
 
-            for (int d = 2; d <= MAX_D; d++)
+            for (int d = 2; d <= MaxD; d++)
             {
                 var x = Enumerable.Range(1, d - 1).ToList();
                 foreach (int p in primeFactors[d])
@@ -161,7 +172,7 @@ namespace Problems70to79
             long nCount = 0;
 
             // initial brute force.
-            for (int d = 2; d <= MAX_D; d++)
+            for (int d = 2; d <= MaxD; d++)
             {
                 for (int n = 1; n < d; n++)
                 {
@@ -173,33 +184,6 @@ namespace Problems70to79
             return nCount;
         }
 
-        // prime method copied from problem 70.
-        private void getPrimes()
-        {
-            // get primes
-            primes = new bool[nPrimeMax];
-            int p = 2;
-            int sqrt_max = (int)Math.Floor(Math.Sqrt(nPrimeMax));
-
-            // initialize all to true
-            for (int i = 2; i < nPrimeMax; i++)
-                primes[i] = true;
-
-            while (p <= sqrt_max)
-            {
-                // cross out all the multiple of p.
-                for (int i = p * p; i < nPrimeMax; i += p)
-                {
-                    primes[i] = false;
-                }
-
-                // get the next p.
-                do
-                {
-                    p++;
-                } while (!primes[p]);
-            }
-        }
 
     }
 }
