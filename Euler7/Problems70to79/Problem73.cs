@@ -3,6 +3,7 @@
  * https://projecteuler.net/problem=73
  * Counting fractions in a range
  * For MAX_D = 8 -> 3; 80 -> 328
+ * 12,000 -> ?
  */
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace Problems70to79
 
         public static void run()
         {
-            var myProblem = new Problem73(8);
+            var myProblem = new Problem73(12000);
             var ans = myProblem.soln1();
             Console.WriteLine("The answer for MAX D {0} is {1:n0} or {1}",
                 myProblem.MaxD, ans);
@@ -33,25 +34,28 @@ namespace Problems70to79
         {
             // initial brute force.
             long nCount = 0;
+            long nAll = 0;
             float oneHalf = (float)1 / 2;
             float oneThird = (float)1 / 3;
 
             for (int d = 2; d <= MaxD; d++)
             {
+                Console.WriteLine("Processing d={0}...", d);
                 for (int n = 1; n < d; n++)
                 {
                     if (Utils.gcd(n, d) == 1)
                     {
+                        nAll++;
                         float thisFraction = (float)n / d;
                         if ((oneThird < thisFraction) && (thisFraction < oneHalf))
                         {
-                            Console.WriteLine("{0}/{1}", n, d);
+                            //Console.WriteLine("{0}/{1}", n, d);
                             nCount++;
                         }
                     }
                 }
             }
-
+            Console.WriteLine("{0} total fractions processed.", nAll);
             return nCount;
         }
     }
