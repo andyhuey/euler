@@ -17,7 +17,7 @@ namespace Problems70to79
     {
         public int MaxD;
         const int nPrimeMax = 1000000;
-        bool[] primes;
+        bool[]? primes;
 
         public static void run()
         {

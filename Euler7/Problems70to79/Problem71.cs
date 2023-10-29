@@ -80,7 +80,7 @@ namespace Problems70to79
             return (!(a > b));
         }
 
-        public override bool Equals(Object o)
+        public override bool Equals(object? o)
         {
             // just adding this and GetHashCode() in to squelch warnings.
             // https://msdn.microsoft.com/en-us/library/7h9bszxx%28v=vs.100%29.aspx

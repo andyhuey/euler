@@ -16,7 +16,7 @@ namespace Problems70to79
     {
         const int nPrimeMax = 10000000;
         const int MAX_N = 10000000;
-        bool[] primes;
+        bool[]? primes;
 
         public long soln1()
         {
