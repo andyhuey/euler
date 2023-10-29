@@ -20,7 +20,7 @@ namespace Problems70to79
         public static void run()
         {
             var myProblem = new Problem73(12000);
-            var ans = myProblem.soln1();
+            var ans = myProblem.soln3();
             Console.WriteLine("The answer for MAX D {0} is {1:n0} or {1}",
                 myProblem.MaxD, ans);
         }
@@ -53,14 +53,19 @@ namespace Problems70to79
 
         public long soln2()
         {
-            // from the PDF...
-            // "Farey Sequences"
-            // I don't understand this...
-            int limit = 10000;
+            // from the PDF, "Farey Sequences".
+            // if limit=10,000, output is 5,066,251
+            // I don't really understand this at all...
+            int limit = MaxD;
+            // 1/3
             int a = 1;
             int b = 3;
-            int c = 3333;
-            int d = 9998;
+            // 1/2
+            int c0 = 1;
+            int d0 = 2;
+            //int k0 = (int)Math.Floor((float)(limit - d0) / b);
+            int c = c0 + (int)Math.Floor((float)(limit - d0) / b) * a;
+            int d = d0 + (int)Math.Floor((float)(limit - d0) / b) * b;
             int count = 0;
 
             while (!(c == 1 && d == 2))
@@ -75,7 +80,31 @@ namespace Problems70to79
                 d = f;
             }
             return count;
+        }
 
+        public long soln3()
+        {
+            // from the PDF, "The Stern-Brocot tree"
+            // (I don't understand this one either, really...)
+            // 1/3, 1/2
+            return CountSB(MaxD, 1, 3, 1, 2);
+        }
+        public int CountSB(int limit, int leftN, int leftD, int rightN, int rightD)
+        {
+            int medN = leftN + rightN;
+            int medD = leftD + rightD;
+
+            if (medD > limit)
+            {
+                return 0;
+            }
+            else
+            {
+                int count = 1;
+                count += CountSB(limit, leftN, leftD, medN, medD);
+                count += CountSB(limit, medN, medD, rightN, rightD);
+                return count;
+            }
         }
     }
 }
