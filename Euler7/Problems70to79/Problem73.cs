@@ -87,12 +87,14 @@ namespace Problems70to79
             // from the PDF, "The Stern-Brocot tree"
             // (I don't understand this one either, really...)
             // 1/3, 1/2
-            return CountSB(MaxD, 1, 3, 1, 2);
+            return CountSB(MaxD, (1, 3), (1, 2));
         }
-        public int CountSB(int limit, int leftN, int leftD, int rightN, int rightD)
+
+        public int CountSB(int limit, (int N, int D) left, (int N, int D) right)
         {
-            int medN = leftN + rightN;
-            int medD = leftD + rightD;
+            int medN = left.N + right.N;
+            int medD = left.D + right.D;
+            var med = (medN, medD);
 
             if (medD > limit)
             {
@@ -101,8 +103,8 @@ namespace Problems70to79
             else
             {
                 int count = 1;
-                count += CountSB(limit, leftN, leftD, medN, medD);
-                count += CountSB(limit, medN, medD, rightN, rightD);
+                count += CountSB(limit, left, med);
+                count += CountSB(limit, med, right);
                 return count;
             }
         }
