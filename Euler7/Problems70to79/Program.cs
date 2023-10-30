@@ -13,12 +13,12 @@ namespace Problems70to79
         {
             var sw = Stopwatch.StartNew();
 
-            Problem73.run();
+            Problem74.Run();
 
             sw.Stop();
             Console.WriteLine("elapsed: {0} ms", sw.Elapsed.TotalMilliseconds);
-            Console.WriteLine("Press enter...");
-            Console.ReadLine();
+            //Console.WriteLine("Press enter...");
+            //Console.ReadLine();
         }
     }
 }
