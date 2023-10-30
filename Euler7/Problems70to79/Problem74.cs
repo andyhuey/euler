@@ -18,7 +18,8 @@ namespace Problems70to79
     internal class Problem74
     {
         private Dictionary<int, int> factorialDict = new Dictionary<int, int>();
-        private Dictionary<int, int> sumOfFactDict = new Dictionary<int, int>();
+        private Dictionary<int, int> loopLenDict = new Dictionary<int, int>();
+        private int loopLenHits = 0;
 
         public static void Run()
         {
@@ -26,6 +27,7 @@ namespace Problems70to79
             var myProblem = new Problem74();
             int ans = myProblem.Soln1();
             Console.WriteLine("The answer is {0}.", ans);
+            myProblem.ShowStats();
         }
 
         public static void RunTest()
@@ -47,7 +49,9 @@ namespace Problems70to79
             int count = 0;
             for (int i =1; i < 1000000; i++)
             {
-                if (FactorialSumLoop(i) == 60)
+                int loopLen = FactorialSumLoop(i);
+                loopLenDict[i] = loopLen;
+                if (loopLen == 60)
                 {
                     Console.WriteLine("Input {0} has 60 terms.", i);
                     count++;
@@ -65,6 +69,13 @@ namespace Problems70to79
             int sum;
             while (!myValues.Contains(n))
             {
+                // can we short-circuit?
+                if (loopLenDict.ContainsKey(n))
+                {
+                    loopLenHits++;
+                    count += loopLenDict[n];
+                    return count;
+                }
                 //Console.Write("{0} -> ", n);
                 myValues.Add(n);
                 sum = SumOfFactorialOfDigits(n);
@@ -77,9 +88,6 @@ namespace Problems70to79
 
         private int SumOfFactorialOfDigits(int n)
         {
-            if (sumOfFactDict.ContainsKey(n))
-                return sumOfFactDict[n];
-
             // for example, 1! + 4! + 5! = 1 + 24 + 120 = 145
             // (original SumOfDigits from problem 65)
             int sum = 0;
@@ -88,7 +96,6 @@ namespace Problems70to79
                 int digit = (int)ch - (int)'0';
                 sum += Factorial(digit);
             }
-            sumOfFactDict.Add(n, sum);
             return sum;
         }
 
@@ -103,6 +110,13 @@ namespace Problems70to79
                 rv *= i;
             factorialDict.Add(n, rv);
             return rv;
+        }
+
+        private void ShowStats()
+        {
+            Console.WriteLine("factorialDict: {0} entries", factorialDict.Count);
+            Console.WriteLine("loopLenDict: {0} entries", loopLenDict.Count);
+            Console.WriteLine("loopLenHits: {0}", loopLenHits);
         }
 
     }
