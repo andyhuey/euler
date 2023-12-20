@@ -13,7 +13,7 @@ namespace Problems70to79
         {
             var sw = Stopwatch.StartNew();
 
-            Problem74.Run();
+            Problem75.Run();
 
             sw.Stop();
             Console.WriteLine("elapsed: {0} ms", sw.Elapsed.TotalMilliseconds);
