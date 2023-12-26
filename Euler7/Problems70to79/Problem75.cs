@@ -16,11 +16,14 @@ namespace Problems70to79
     {
         public static void Run()
         {
+            Console.WriteLine("Started at {0}", DateTime.Now);
             var myProblem = new Problem75();
-            //int ans = myProblem.Soln1(50);  // 6
-            //int ans = myProblem.Soln2(50);  // 6
-            int ans = myProblem.Soln2(120);     // 13
-            //int ans = myProblem.Soln2(1500000);
+            //int lMax = 50;          // 6
+            //int lMax = 120;         // 13
+            int lMax = 1500000;       // 161667
+            //int ans = myProblem.Soln1(lMax);
+            int ans = myProblem.Soln2(lMax);
+            //int ans = myProblem.Soln3(lMax);
             Console.WriteLine("The answer is {0}.", ans);
         }
 
@@ -68,16 +71,19 @@ namespace Problems70to79
         private int Soln2(int lMax)
         {
             List<Triangle>[] trianglesOfL = new List<Triangle>[lMax + 1];
-            int[] nTrianglesOfL = new int[lMax+1];
+            int[] nTrianglesOfL = new int[lMax + 1];
 
             for (int i = 1; i <= lMax; i++)
                 trianglesOfL[i] = new List<Triangle>();
 
-            for (int n = 1; n < lMax; n++)
+            var sqrtOflMax = Math.Sqrt(lMax);
+            Console.WriteLine("Checking from 1 to {0} for L max = {1}...", sqrtOflMax, lMax);
+
+            for (int n = 1; n < sqrtOflMax; n++)
             {
-                if (n % 100 == 0)
-                    Console.WriteLine($"  n = {n}...");
-                for (int m = n + 1; m < lMax; m++)
+                //if (n % 100 == 0)
+                //    Console.WriteLine($"  n = {n}...");
+                for (int m = n + 1; m < sqrtOflMax; m++)
                 {
                     int a = (m * m - n * n);
                     int b = (2 * m * n);
@@ -111,17 +117,34 @@ namespace Problems70to79
                 } // end for m
             } // end for n
 
+            int nTotal = GetTriangleCount(lMax, trianglesOfL, nTrianglesOfL);
+            return nTotal;
+        }
+
+        private int GetTriangleCount(int lMax, List<Triangle>[] trianglesOfL, int[] nTrianglesOfL)
+        {
+            Console.WriteLine("Getting triangle count...");
             int nTotal = 0;
+            bool tooMuchOutput = false;
             for (int i = 1; i <= lMax; i++)
                 if (nTrianglesOfL[i] >= 1)
                 {
-                    Console.Write("{0}cm: {1} triangles: ", i, nTrianglesOfL[i]);
-                    foreach (Triangle t in trianglesOfL[i])
-                        Console.Write(t.ToString());
-                    Console.WriteLine();
+                    if (!tooMuchOutput)
+                    {
+                        Console.Write("{0}cm: {1} triangles: ", i, nTrianglesOfL[i]);
+                        foreach (Triangle t in trianglesOfL[i])
+                            Console.Write(t.ToString());
+                        Console.WriteLine();
+                        if (nTotal > 20)
+                        {
+                            tooMuchOutput = true;
+                            Console.WriteLine("(...and so on.)");
+                        }
+                    }
                     if (nTrianglesOfL[i] == 1)
                         nTotal++;
                 }
+
             return nTotal;
         }
 
@@ -136,17 +159,56 @@ namespace Problems70to79
             }
             return false;
         }
+
+        private int Soln3(int lMax)
+        {
+            // from problem 39.
+            List<Triangle>[] trianglesOfL = new List<Triangle>[lMax + 1];
+            int[] nTrianglesOfL = new int[lMax + 1];
+
+            for (int i = 1; i <= lMax; i++)
+                trianglesOfL[i] = new List<Triangle>();
+
+            for (long a = 1; a < lMax; a++)
+            {
+                if (a % 100 == 0)
+                    Console.WriteLine($"a = {a}...");
+
+                for (long b = a; b < lMax; b++)
+                {
+                    if (a + b >= lMax)
+                        continue;
+
+                    double c = Math.Sqrt((a * a) + (b * b));
+                    if (c != Math.Floor(c))     // must be a whole #.
+                        continue;
+                    if (c < 1)                  // zero doesn't count.
+                        continue;
+                    long c1 = Convert.ToInt64(c);
+                    long L = a + b + c1;
+                    if (L > lMax)
+                        continue;
+
+                    Triangle t = new Triangle(a, b, c1);
+                    if (AddTriangle(trianglesOfL[L], t))
+                        nTrianglesOfL[L]++;
+                }
+            }
+            int nTotal = GetTriangleCount(lMax, trianglesOfL, nTrianglesOfL);
+            return nTotal;
+
+        }
     }
 
     internal struct Triangle
     {
-        public int X { get; }
-        public int Y { get; }
-        public int Z { get; }
+        public long X { get; }
+        public long Y { get; }
+        public long Z { get; }
 
         public long L { get { return X + Y + Z; } }
 
-        public Triangle(int x, int y, int z)
+        public Triangle(long x, long y, long z)
         {
             if (x <= 0 || y <= 0 || z <= 0)
                 throw new ArgumentException("Sides of a triangle must be positive numbers.");
@@ -158,7 +220,7 @@ namespace Problems70to79
             Z = z;
         }
 
-        public static bool IsValidTriangle(int x, int y, int z)
+        public static bool IsValidTriangle(long x, long y, long z)
         {
             if (x <= 0 || y <= 0 || z <= 0)
                 return false;
@@ -178,8 +240,8 @@ namespace Problems70to79
             if (obj is Triangle)
             {
                 Triangle t = (Triangle)obj;
-                int[] thisSides = new int[] { X, Y, Z };
-                int[] otherSides = new int[] { t.X, t.Y, t.Z };
+                long[] thisSides = new long[] { X, Y, Z };
+                long[] otherSides = new long[] { t.X, t.Y, t.Z };
                 Array.Sort(thisSides);
                 Array.Sort(otherSides);
                 return thisSides.SequenceEqual(otherSides);
