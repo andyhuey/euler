@@ -19,8 +19,8 @@ namespace Problems70to79
             var myProblem = new Problem75();
             //int ans = myProblem.Soln1(50);  // 6
             //int ans = myProblem.Soln2(50);  // 6
-            //int ans = myProblem.Soln2(120);     // 13
-            int ans = myProblem.Soln2(1500000);
+            int ans = myProblem.Soln2(120);     // 13
+            //int ans = myProblem.Soln2(1500000);
             Console.WriteLine("The answer is {0}.", ans);
         }
 
@@ -70,37 +70,47 @@ namespace Problems70to79
             List<Triangle>[] trianglesOfL = new List<Triangle>[lMax + 1];
             int[] nTrianglesOfL = new int[lMax+1];
 
-            for (int k = 1; k < lMax; k++)
+            for (int i = 1; i <= lMax; i++)
+                trianglesOfL[i] = new List<Triangle>();
+
+            for (int n = 1; n < lMax; n++)
             {
-                Console.WriteLine($"k = {k}...");
-                for (int n = 1; n < lMax; n++)
-                {
+                if (n % 100 == 0)
                     Console.WriteLine($"  n = {n}...");
-                    for (int m = n + 1; m < lMax; m++)
+                for (int m = n + 1; m < lMax; m++)
+                {
+                    int a = (m * m - n * n);
+                    int b = (2 * m * n);
+                    int c = (m * m + n * n);
+                    if (a < lMax && b < lMax && c < lMax)
                     {
-                        int a = k * (m * m - n * n);
-                        int b = k * (2 * m * n);
-                        int c = k * (m * m + n * n);
-                        if (a < lMax && b < lMax && c < lMax)
+                        long L = a + b + c;
+                        if (L <= lMax && Triangle.IsValidTriangle(a, b, c))
                         {
-                            long L = a + b + c;
-                            //int L = k * 2 * ((m * m) + (m * n));
-                            if (L <= lMax && Triangle.IsValidTriangle(a, b, c))
+                            Triangle t = new Triangle(a, b, c);
+                            if (AddTriangle(trianglesOfL[L], t))
                             {
-                                Triangle t = new Triangle(a, b, c);
-                                if (trianglesOfL[L] is null)
-                                    trianglesOfL[L] = new List<Triangle>();
-                                if (!trianglesOfL[L].Any(t1 => t1.Equals(t)))
+                                nTrianglesOfL[L]++;
+                                int k = 1;
+                                //Console.WriteLine($"{L}cm: {t} - k={k}, n={n}, m={m}");
+                                while (L <= lMax)
                                 {
-                                    //Console.WriteLine($"{L}cm: {t} - k={k}, n={n}, m={m}");
-                                    trianglesOfL[L].Add(t);
-                                    nTrianglesOfL[L]++;
-                                }
+                                    // and now let's add multiples of this guy...
+                                    k++;
+                                    Triangle t2 = new Triangle(a * k, b * k, c * k);
+                                    L = t2.L;
+                                    if (L <= lMax)
+                                    {
+                                        if (AddTriangle(trianglesOfL[L], t2))
+                                            nTrianglesOfL[L]++;
+                                    }
+                                }   // end while L
                             }
                         }
                     }
-                }
-            }
+                } // end for m
+            } // end for n
+
             int nTotal = 0;
             for (int i = 1; i <= lMax; i++)
                 if (nTrianglesOfL[i] >= 1)
@@ -115,6 +125,17 @@ namespace Problems70to79
             return nTotal;
         }
 
+        private bool AddTriangle(List<Triangle> triangles, Triangle t)
+        {
+            //if (triangles is null)
+            //    triangles = new List<Triangle>();
+            if (!triangles.Any(t1 => t1.Equals(t)))
+            {
+                triangles.Add(t);
+                return true;
+            }
+            return false;
+        }
     }
 
     internal struct Triangle
@@ -122,6 +143,8 @@ namespace Problems70to79
         public int X { get; }
         public int Y { get; }
         public int Z { get; }
+
+        public long L { get { return X + Y + Z; } }
 
         public Triangle(int x, int y, int z)
         {
