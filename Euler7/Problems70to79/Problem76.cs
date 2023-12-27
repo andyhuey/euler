@@ -23,9 +23,10 @@ namespace Problems70to79
             //int N = 3;      // 2+1, 1+1+1
             //int N = 4;
             //int N = 5;   // 6 ways
+            //int N = 6;      // 10 ways?
             //int N = 10;
             int N = 100;    // 190569291
-            int ans = myProblem.Soln2(N);
+            int ans = myProblem.Soln4(N);
             Console.WriteLine("The answer is {0}.", ans);
         }
 
@@ -67,7 +68,7 @@ namespace Problems70to79
 
         private int Soln2(int N)
         {
-            // from problem 31.
+            // from problem 31. (This is actually pretty slow.)
             int[] S = Enumerable.Range(1, N).ToArray();
             int m = S.Length;
             int n = N;
@@ -91,6 +92,7 @@ namespace Problems70to79
             // count is sum of solutions (i) including S[m-1] (ii) excluding S[m-1]
             return Counter(S, m - 1, n) + Counter(S, m, n - S[m - 1]);
         }
+
         private int Soln3(int N)
         {
             // from https://web.archive.org/web/20120316021735/https://www.mathblog.dk/project-euler-76-one-hundred-sum-integers/
@@ -107,11 +109,66 @@ namespace Problems70to79
             }
             return ways[ways.Length - 1];
         }
+
+        private int Soln4(int N)
+        {
+            // from forum, "quesswho", Tue, 23 Nov 2021, 18:16
+            int[] ways = new int[N+1];
+            ways[0] = 1;
+            for (int i = 1; i < N; i++)
+                for (int j = i; j <= N; j++)
+                    ways[j] += ways[j - i];
+            return ways[N];
+        }
+
+        private int Soln5(int N)
+        {
+            // this came out of Poe, and is not great, but kinda works...
+            // (not efficient enough to do N=100.)
+            List<SumList> sets = new List<SumList>();
+            GenerateSetsHelper(N, new SumList(), sets);
+
+            // Print the generated sets
+            int count = 0;
+            foreach (var s in sets)
+            {
+                if (!s.CheckSorted())
+                    continue;
+                if (s.intList.Count < 2)
+                    continue;
+                Console.WriteLine(s);
+                if (s.GetSum() != N)
+                    throw new Exception("Unexpected sum.");
+                //throw new Exception("List is not sorted.");
+                //if (sets.Count(x => x.Equals(s)) > 1)
+                //    throw new Exception("Duplicate entry in list.");
+                count++;
+            }
+            return count; // sets.Count();
+        }
+
+        private static void GenerateSetsHelper(int N, SumList currentSet, List<SumList> allSets)
+        {
+            if (N == 0)
+            {
+                allSets.Add(currentSet);
+            }
+            else if (N > 0)
+            {
+                for (int i = 1; i <= N; i++)
+                {
+                    SumList newSet = new SumList(currentSet.intList);
+                    newSet.AddToList(i);
+                    GenerateSetsHelper(N - i, newSet, allSets);
+                }
+            }
+        }
+
     }
 
     internal class SumList
     {
-        List<int> intList;
+        public List<int> intList { get; }
 
         public SumList()
         {
