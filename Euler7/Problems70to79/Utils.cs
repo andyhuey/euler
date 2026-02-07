@@ -36,7 +36,8 @@ namespace Problems70to79
         }
 
         // prime method copied from problem 60.
-        public static bool[] getPrimes(int nPrimeMax)
+        // returns an array of bools, where primes[i] is true if i is prime.
+        public static bool[] GetPrimes(int nPrimeMax)
         {
             // get primes
             bool[] primes = new bool[nPrimeMax];

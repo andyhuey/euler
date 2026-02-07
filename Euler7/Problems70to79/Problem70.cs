@@ -25,7 +25,7 @@ namespace Problems70to79
 
             List<int>[] primeFactors = new List<int>[MAX_N + 1];
 
-            primes = Utils.getPrimes(nPrimeMax);
+            primes = Utils.GetPrimes(nPrimeMax);
             IEnumerable<int> lstPrimes = Enumerable.Range(2, nPrimeMax - 2).Where(x => primes[x]);
             Console.WriteLine("Got {0} primes.", lstPrimes.Count());
 

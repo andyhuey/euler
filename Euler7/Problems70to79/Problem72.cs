@@ -36,7 +36,7 @@ namespace Problems70to79
         {
             long nCount = 0;
 
-            primes = Utils.getPrimes(nPrimeMax);
+            primes = Utils.GetPrimes(nPrimeMax);
             IEnumerable<int> lstPrimes = Enumerable.Range(2, nPrimeMax - 2).Where(x => primes[x]);
             Console.WriteLine("Got {0} primes.", lstPrimes.Count());
 
@@ -123,7 +123,7 @@ namespace Problems70to79
         {
             long nCount = 0;
 
-            primes = Utils.getPrimes(nPrimeMax);
+            primes = Utils.GetPrimes(nPrimeMax);
             IEnumerable<int> lstPrimes = Enumerable.Range(2, nPrimeMax - 2).Where(x => primes[x]);
             Console.WriteLine("Got {0} primes.", lstPrimes.Count());
 

@@ -10,7 +10,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `Euler7` uses SDK-style `.csproj` targeting .NET 8.0 and supports `dotnet build`/`dotnet run`.
 - F# project: `msbuild archive/EulerFS0/EulerFS0/EulerFS0.fsproj`
 - No automated tests or linting — each project is a console app that prints its answer. To run a different problem, edit `Program.cs` to call the desired problem class.
-- `Euler7` is the currently-active project (its `Program.cs` runs `Problem76.Run()`).
+- `Euler7` is the currently-active project. Projects under the 'archive' folder can be ignored.
 
 ## Architecture
 
@@ -24,3 +24,4 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Problem classes are named `ProblemXX`. Older projects (Euler0–Euler6) use instance methods like `soln1()`, `soln2()`. Euler7 uses a static `Run()` method that handles its own instantiation and output.
 - Multiple solution approaches for the same problem are kept as separate methods (e.g., `Soln1` through `Soln5`).
 - Shared helpers are local to each project (e.g., `Utils.cs` in Euler7 with `gcd` and `getPrimes`). There is no shared utility library across projects.
+- This repo is used for experimentation and learning. Generally, I do not want you to rush ahead and implement a solution to the Euler problem. I want you to help me figure out how to do it.
