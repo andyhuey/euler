@@ -6,16 +6,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 - Build a specific project: `dotnet build Euler7/Problems70to79/Problems70to79.csproj`
 - Run the active project: `dotnet run --project Euler7/Problems70to79/Problems70to79.csproj`
-- Older projects (Euler0–Euler6) target .NET Framework 4.5 (legacy `.csproj` format) and require `msbuild`: `msbuild Euler0/Projects1to10/Projects1to10.csproj`
+- Older projects (Euler0–Euler6) target .NET Framework 4.5 (legacy `.csproj` format) and require `msbuild`: `msbuild archive/Euler0/Projects1to10/Projects1to10.csproj`
 - `Euler7` uses SDK-style `.csproj` targeting .NET 8.0 and supports `dotnet build`/`dotnet run`.
-- F# project: `msbuild EulerFS0/EulerFS0/EulerFS0.fsproj`
+- F# project: `msbuild archive/EulerFS0/EulerFS0/EulerFS0.fsproj`
 - No automated tests or linting — each project is a console app that prints its answer. To run a different problem, edit `Program.cs` to call the desired problem class.
 - `Euler7` is the currently-active project (its `Program.cs` runs `Problem76.Run()`).
 
 ## Architecture
 
 - Collection of Project Euler (projecteuler.net) solutions organized into separate console apps, ~10 problems each.
-- `Euler0` through `Euler7`: C# solutions. `EulerFS0`: F# reimplementations of select problems.
+- `Euler0` through `Euler7`: C# solutions. `EulerFS0`: F# reimplementations of select problems. Older projects (Euler0–Euler6, EulerFS0) live in the `archive/` folder.
 - Each project has a `Program.cs`/`Program.fs` entry point that instantiates one problem and calls its solution method. A `Stopwatch` is used in newer projects to time execution.
 
 ## Conventions
