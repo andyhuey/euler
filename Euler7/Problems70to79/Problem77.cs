@@ -4,6 +4,8 @@
  * Prime Summations
  * What is the first value which can be written as the sum of primes in over five thousand ways?
  * Written with help from Claude Code.
+ * The answer is 71, which can be written in 5007 ways.
+ * (Note that this could also be done similar to Problem 31, but with primes instead of coins.)
  */
 
 namespace Problems70to79
