@@ -10,12 +10,44 @@ namespace Problems70to79
 {
     internal class Problem77
     {
+        private bool[] primes;
+        private int[] ways;
+
+        public Problem77(int maxN)
+        {
+            primes = Utils.GetPrimes(maxN + 1);
+            ways = GetWays(maxN);
+        }
+
+        private int[] GetWays(int maxN)
+        {
+            int[] ways = new int[maxN + 1];
+            ways[0] = 1;
+            for (int i = 1; i <= maxN; i++)
+                if (primes[i])
+                    for (int j = i; j <= maxN; j++)
+                        ways[j] += ways[j - i];
+            return ways;
+        }
+
         public static void Run()
         {
             Console.WriteLine("Started at {0}", DateTime.Now);
-            var myProblem = new Problem77();
-            //myProblem.HowManyWays(10);
-            myProblem.RunTests();
+            int maxN = 100; // just a guess.
+            var myProblem = new Problem77(maxN);
+            int targetValue = 5000; // "more than 5000 ways."
+            for (int n = 1; n <= maxN; n++)
+            {
+                int numWays = myProblem.HowManyWays(n);
+                if (numWays > targetValue)
+                {
+                    Console.WriteLine("The answer is {0}, which can be written in {1} ways.", 
+                        n, numWays);
+                    break;
+                }
+            }
+            //Console.WriteLine("PS(99) = {0}", myProblem.HowManyWays(99));
+            //myProblem.RunTests();
         }
 
         private void RunTests()
@@ -38,17 +70,6 @@ namespace Problems70to79
 
         private int HowManyWays(int N)
         {
-            // given N, how many ways can it be written as a sum of primes?
-            // if (N < 2) return 0;
-            bool[] primes = Utils.GetPrimes(N + 1);
-            // PrintPrimes(N, primes);
-
-            int[] ways = new int[N + 1];
-            ways[0] = 1;
-            for (int i = 1; i <= N; i++)
-                if (primes[i])
-                    for (int j = i; j <= N; j++)
-                        ways[j] += ways[j - i];
             return ways[N];
         }
 
